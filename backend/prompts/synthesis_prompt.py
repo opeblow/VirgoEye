@@ -26,19 +26,19 @@ INSTRUCTIONS:
 6. Build a clear evidence chain showing HOW you reached the conclusion
 
 OUTPUT FORMAT: Respond with ONLY valid JSON:
-{
+{{
   "primary_finding": "...",
   "severity": "CRITICAL|WARNING|NOMINAL",
   "confidence": 0.0,
   "affected_entities": [
-    {"entity_id": "E2", "role": "primary", "bbox": {"xmin": 0.0, "ymin": 0.0, "xmax": 0.0, "ymax": 0.0}}
+    {{"entity_id": "E2", "role": "primary", "bbox": {{"xmin": 0.0, "ymin": 0.0, "xmax": 0.0, "ymax": 0.0}}}}
   ],
   "evidence_chain": [
-    {"step_number": 1, "description": "...", "supporting_entity_ids": ["E1", "E2"]}
+    {{"step_number": 1, "description": "...", "supporting_entity_ids": ["E1", "E2"]}}
   ],
   "recommended_action": "...",
   "summary": "..."
-}
+}}
 
 Be precise. Be calibrated. This verdict may inform critical decisions.
 """
