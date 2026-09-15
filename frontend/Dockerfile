@@ -5,6 +5,10 @@ RUN npm install --no-audit --no-fund
 
 FROM node:20-alpine AS builder
 WORKDIR /app
+# NEXT_PUBLIC_* vars are inlined at build time by Next.js; supply them as
+# ARG so docker-compose can inject the backend URL (default: local dev).
+ARG NEXT_PUBLIC_API_BASE=/api
+ENV NEXT_PUBLIC_API_BASE=${NEXT_PUBLIC_API_BASE}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
