@@ -59,11 +59,25 @@ def _detect_mime(data: bytes) -> str:
         return "image/webp"
     if data[:2] == b"BM":
         return "image/bmp"
-    return "image/jpeg"
+    raise ImageValidationError(
+        "Unrecognized image format — expected JPEG, PNG, WebP, or BMP"
+    )
+
+
+# Upper bound on the base64-encoded payload for MAX_IMAGE_BYTES bytes
+# (4 chars per 3 bytes, rounded up), plus slack for data-URI prefixes.
+def _max_encoded_bytes() -> int:
+    return ((config.MAX_IMAGE_BYTES + 2) // 3) * 4
 
 
 def load_from_base64(encoded: str) -> ProcessedImage:
-    data = decode_image_data(encoded)
+    cleaned = _clean_b64(encoded)
+    if len(cleaned) > _max_encoded_bytes():
+        raise ImageValidationError(
+            f"Encoded image too large ({len(cleaned)} base64 chars > "
+            f"max {config.MAX_IMAGE_BYTES} bytes)"
+        )
+    data = decode_image_data(cleaned)
     if len(data) > config.MAX_IMAGE_BYTES:
         raise ImageValidationError(
             f"Image too large ({len(data)} bytes > {config.MAX_IMAGE_BYTES})"
@@ -71,10 +85,14 @@ def load_from_base64(encoded: str) -> ProcessedImage:
     mime = _detect_mime(data)
     if mime not in config.SUPPORTED_MIME:
         raise ImageValidationError(f"Unsupported image type: {mime}")
+    if len(data) == 0:
+        raise ImageValidationError("Empty image payload")
     try:
         pil = Image.open(io.BytesIO(data))
         pil.load()
-    except UnidentifiedImageError as exc:
+    except (UnidentifiedImageError, OSError) as exc:
+        # PIL raises UnidentifiedImageError, but truncated/corrupt payloads
+        # surface as OSError ("broken data stream") — both mean "not an image".
         raise ImageValidationError("Decoded bytes are not a valid image") from exc
 
     pil = pil.convert("RGB")
