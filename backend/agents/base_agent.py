@@ -71,8 +71,16 @@ class BaseAgent(ABC):
         return self._stream_ollama(image_b64, prompt)
 
     def _track(self, chunk: Dict[str, Any]) -> None:
-        if chunk.get("delta"):
-            self.tracker.record_tokens(self.stage_name, len(chunk["delta"]))
+        delta = chunk.get("delta") or ""
+        if delta:
+            # delta length is characters, not tokens — approximate ~4 chars/
+            # token so throughput numbers are not inflated by raw char counts.
+            self.tracker.record_tokens(self.stage_name, max(1, len(delta) // 4))
+        eval_count = chunk.get("eval_count")
+        if eval_count:
+            # Ollama reports the exact cumulative token count on the final
+            # chunk; it is authoritative for this stage.
+            self.tracker.record_eval_count(self.stage_name, int(eval_count))
 
 
 def extract_json_block(text: str) -> str:
