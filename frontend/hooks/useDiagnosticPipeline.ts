@@ -84,6 +84,8 @@ function reducer(s: PipelineState, a: Action): PipelineState {
         return { ...s, verdict: ev.data as unknown as FinalVerdict };
       }
       if (ev.stage === "metrics" && ev.type === "metrics") {
+        // Metrics mark completion — but an error is terminal and must win.
+        if (s.stage === "error") return s;
         return {
           ...s,
           metrics: ev.data as unknown as PerformanceMetrics,
