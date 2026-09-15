@@ -24,7 +24,6 @@ class SpatialMapper(BaseAgent):
         self, ctx: Any, image_b64: str
     ) -> AsyncGenerator[Dict[str, Any], None]:
         prompt = build_spatial_prompt(ctx.domain)
-        del ctx
         text = ""
         stream = self._stream(image_b64, prompt)
         try:
