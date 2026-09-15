@@ -1,0 +1,54 @@
+# ===== OS / editor cruft =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env_backup/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+mypy_cache/
+ruff_cache/
+*.egg-info/
+build/
+dist/
+
+# ===== Node / Next.js =====
+node_modules/
+.next/
+out/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.tsbuildinfo
+.eslintcache
+
+# ===== Environment / secrets — NEVER commit real values =====
+.env
+.env.*
+!.env.example
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Misc runtime artifacts =====
+.python-version
+.convex/
+.DS_store
+*.pyproj
+*.sln
+*.user
