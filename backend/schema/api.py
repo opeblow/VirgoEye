@@ -1,17 +1,26 @@
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional
 
 from pydantic import BaseModel, Field
+
+from backend import config
 
 
 class AnalyzeRequest(BaseModel):
     """Request body for /v1/analyze"""
 
-    image_base64: str = Field(..., description="Base64 encoded image")
-    domain: str = Field(
-        default="auto", description="auto|pcb|medical|architecture|satellite"
+    image_base64: str = Field(
+        ...,
+        min_length=16,
+        max_length=((config.MAX_IMAGE_BYTES + 2) // 3) * 4,
+        description="Base64 encoded image",
     )
-    detail_level: str = Field(default="high", description="low|medium|high")
+    domain: Literal[
+        "auto", "pcb", "medical", "architecture", "satellite"
+    ] = Field(default="auto", description="auto|pcb|medical|architecture|satellite")
+    detail_level: Literal["low", "medium", "high"] = Field(
+        default="high", description="low|medium|high"
+    )
 
 
 class ErrorResponse(BaseModel):
