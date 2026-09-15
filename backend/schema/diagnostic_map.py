@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class EntityCategory(str, Enum):
@@ -22,6 +22,14 @@ class BoundingBox(BaseModel):
     xmax: float = Field(..., ge=0.0, le=1.0, description="Right edge")
     ymax: float = Field(..., ge=0.0, le=1.0, description="Bottom edge")
 
+    @model_validator(mode="after")
+    def _check_ordering(self) -> "BoundingBox":
+        if self.xmax <= self.xmin:
+            raise ValueError("bbox xmax must be greater than xmin")
+        if self.ymax <= self.ymin:
+            raise ValueError("bbox ymax must be greater than ymin")
+        return self
+
 
 class DetectedEntity(BaseModel):
     """A single detected entity in the image"""
@@ -41,3 +49,15 @@ class DiagnosticMap(BaseModel):
     total_entities: int
     image_context: str = Field(..., description="Brief description of image type/domain")
     scan_coverage: float = Field(..., ge=0.0, le=1.0, description="% of image analyzed")
+
+    @model_validator(mode="after")
+    def _check_consistency(self) -> "DiagnosticMap":
+        ids = [e.id for e in self.entities]
+        if len(set(ids)) != len(ids):
+            raise ValueError("entity ids must be unique")
+        if self.total_entities != len(ids):
+            raise ValueError(
+                f"total_entities ({self.total_entities}) does not match entity "
+                f"count ({len(ids)})"
+            )
+        return self
