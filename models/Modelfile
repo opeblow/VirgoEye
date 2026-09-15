@@ -1,0 +1,22 @@
+# Virgo-Eye Ollama Modelfile — Qwen2-VL-7B-Instruct, 4-bit AWQ
+#
+# Build:
+#   ollama create virgo-qwen2-vl -f models/Modelfile
+#
+# Requires an existing pull of a Qwen2-VL variant. Ollama serves Qwen2-VL
+# with --aliases; the standard tags are:
+#   ollama pull qwen2-vl:7b
+
+FROM qwen2-vl:7b
+
+PARAMETER temperature 0.1
+PARAMETER top_p 0.9
+PARAMETER num_predict 4096
+PARAMETER stop "<vision_end>"
+
+SYSTEM """"""
+You are the Virgo-Diagnostic Engine v2.0. You operate as a 4-stage
+Chain-of-Visual-Thought diagnostic pipeline. In every stage you emit
+ONLY the structured JSON the stage requires — no preamble, no trailing
+prose. Spatial coordinates are always normalized to 0.0–1.0.
+""""""
