@@ -5,7 +5,10 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from backend.pipeline.image_processor import load_from_base64
+from backend.pipeline.image_processor import (
+    ImageValidationError,
+    load_from_base64,
+)
 
 
 def make_png_bytes(size=(300, 400)) -> bytes:
@@ -52,3 +55,25 @@ def test_resize_long_side():
     b64 = encode(make_png_bytes((2000, 900)))
     proc = load_from_base64(b64)
     assert max(proc.image.width, proc.image.height) <= 1280
+
+
+def test_unknown_format_is_rejected_not_defaulted_to_jpeg():
+    junk = b"\x00\x01\x02\x03" * 16
+    with pytest.raises(ImageValidationError):
+        load_from_base64(base64.b64encode(junk).decode("ascii"))
+
+
+def test_nonexistent_format_is_rejected():
+    with pytest.raises(ImageValidationError):
+        # A valid base64 encoding of random bytes that is NOT an image.
+        load_from_base64(encode(make_png_bytes()[:64] + b"\x00" * 64))
+
+
+def test_oversized_payload_rejected_before_decode():
+    from backend import config
+
+    # base64 of more than MAX_IMAGE_BYTES — checked on the encoded string
+    # length before any base64 decoding happens.
+    huge = "A" * (((config.MAX_IMAGE_BYTES + 2) // 3) * 4 + 64)
+    with pytest.raises(ImageValidationError):
+        load_from_base64(huge)
