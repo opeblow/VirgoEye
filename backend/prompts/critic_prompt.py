@@ -32,19 +32,19 @@ CHECK FOR:
    appropriate given the evidence? Over-confident? Under-confident?
 
 OUTPUT FORMAT: Respond with ONLY valid JSON:
-{
+{{
   "verified": true,
   "hallucination_count": 0,
   "hallucinations": [
-    {"chunk_id": 0, "claim": "...", "issue": "...", "severity": "minor|major|critical"}
+    {{"chunk_id": 0, "claim": "...", "issue": "...", "severity": "minor|major|critical"}}
   ],
   "missed_entities": ["E4", "E11"],
   "corrections": [
-    {"original_claim": "...", "issue": "...", "corrected_claim": "..."}
+    {{"original_claim": "...", "issue": "...", "corrected_claim": "..."}}
   ],
   "critic_confidence": 0.0,
   "critic_notes": "..."
-}
+}}
 
 Be ruthless. Your job is to catch errors. The final verdict depends on you.
 """
