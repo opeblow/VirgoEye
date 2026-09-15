@@ -35,7 +35,7 @@ class PipelineOrchestrator:
         tracker: Optional[SpeedTracker] = None,
     ) -> None:
         self.ollama = ollama or OllamaClient()
-        self.vllm = vllm if config.VLLM_ENABLED else None
+        self.vllm = vllm or (VLLMClient() if config.VLLM_ENABLED else None)
         self.gpu = gpu or GPUMonitor()
         self.tracker = tracker or SpeedTracker()
         self.cache = KVCacheManager(
@@ -60,6 +60,10 @@ class PipelineOrchestrator:
             if self._ollama_ok:
                 self._model_name = getattr(self.vllm, "model", "vllm-model")
                 self._demo_mode = False
+            else:
+                self._demo_mode = True
+                self._model_name = "DEMO-SYSTEM"
+                self._quantization = "n/a"
             return
         self._ollama_ok = await self.ollama.health()
         if not self._ollama_ok:
@@ -153,27 +157,38 @@ class PipelineOrchestrator:
             self.tracker.begin_stage(agent.stage_name)
             cache_key = ctx.stage_prompt_variant(agent.stage_name)
             cached = self.cache.get(cache_key)
+            failed = False
             if cached is not None:
-                yield {"type": "chunk", "stage": agent.stage_name, "delta": cached}
+                ctx.restore(agent.stage_name, cached)
+                yield cached
             else:
+                stage_result = None
                 async for ev in agent.run(ctx, image_b64):
+                    if ev.get("type") == "error":
+                        failed = True
+                    if ev.get("type") == "stage_result":
+                        stage_result = ev
                     yield ev
-                self.cache.store(
-                    cache_key,
-                    ctx.map_json or ctx.reasoning_output or ctx.critique_json,
-                )
+                if stage_result is not None and not failed:
+                    self.cache.store(cache_key, stage_result)
             self.tracker.end_stage(agent.stage_name)
-        async for ev in self._emit_metrics():
+            if failed:
+                # A stage error is terminal — later stages only degrade the
+                # stream with cascading "requires Stage X" errors.
+                return
+        async for ev in self._emit_metrics(ctx):
             yield ev
 
-    async def _emit_metrics(self) -> None:
+    async def _emit_metrics(
+        self, ctx: PipelineContext
+    ) -> AsyncGenerator[Dict[str, Any], None]:
         gpu = self.gpu.snapshot()
         metrics = PerformanceMetrics(
             **self.tracker.metrics(
                 gpu,
                 model_name=self._model_name,
                 quantization=self._quantization,
-                image_resolution="live",
+                resolution=ctx.image.resolution_label,
             )
         )
         yield {
