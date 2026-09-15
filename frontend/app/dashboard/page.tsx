@@ -66,6 +66,40 @@ export default function Dashboard() {
           </GlassCard>
         </div>
 
+        {health?.demo_mode && (
+          <div className="mt-4">
+            <GlassCard noPad className="px-4 py-2 border border-virgo-accent2/50 bg-virgo-accent2/5 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-virgo-accent2">
+                Synthetic UI demonstration
+              </span>
+              <span className="text-[10px] font-mono text-virgo-muted">
+                No live inference — Ollama/vLLM not reachable. Outputs are
+                image-aware simulations, not medical/engineering verdicts.
+              </span>
+            </GlassCard>
+          </div>
+        )}
+
+        {state.error && (
+          <div className="mt-4">
+            <GlassCard noPad className="p-4 border border-virgo-danger/60 bg-virgo-danger/5">
+              <div className="flex items-start gap-3">
+                <span className="text-virgo-danger font-mono text-xs mt-0.5">
+                  [error]
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-virgo-danger">
+                    Diagnostic pipeline failed
+                  </p>
+                  <p className="text-xs font-mono text-virgo-muted mt-1">
+                    {state.error}
+                  </p>
+                </div>
+              </div>
+            </GlassCard>
+          </div>
+        )}
+
         <div className="mt-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
           {/* Left rail: upload + entity list */}
           <div className="lg:col-span-3 flex flex-col gap-4">
