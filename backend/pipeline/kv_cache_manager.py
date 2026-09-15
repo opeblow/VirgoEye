@@ -14,8 +14,13 @@ This module implements the bookkeeping and the image-batching hint.
 """
 
 import hashlib
+import json
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, Optional, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple
+
+# Bump this whenever a stage prompt/format changes so stale cached
+# results are automatically invalidated.
+PROMPT_VERSION = "2.0.1"
 
 
 @dataclass
@@ -33,29 +38,57 @@ class PipelineContext:
     metrics: Dict = field(default_factory=dict)
 
     def stage_prompt_variant(self, stage: str, variant: int = 0) -> str:
-        """Identifier for caching: model + image + stage + variant."""
-        return f"{self.model_name}|{self.image_hash}|{stage}|{variant}"
+        """Identifier for caching: model + image + variant inputs + stage.
+
+        Includes domain/detail_level because those change the prompts the
+        stages receive (e.g. the domain block prepended to Stage 1).
+        """
+        return "|".join(
+            [
+                self.model_name,
+                self.image_hash,
+                self.domain,
+                self.detail_level,
+                stage,
+                str(variant),
+                PROMPT_VERSION,
+            ]
+        )
+
+    def restore(self, stage: str, event: Dict[str, Any]) -> None:
+        """Rehydrate this context from a cached stage_result event so
+        downstream stages see the same artifacts as a live run."""
+        data = event.get("data") or {}
+        if stage == "mapping":
+            self.map_json = json.dumps(data, ensure_ascii=False)
+        elif stage == "deliberation":
+            self.reasoning_output = str(data.get("thought_chain", ""))
+        elif stage == "critic":
+            self.critique_json = json.dumps(data, ensure_ascii=False)
 
 
 class KVCacheManager:
-    """Tracks completed (model, image) inference results per stage."""
+    """Tracks completed (model, image, variant) stage events per stage."""
 
     def __init__(self, enabled: bool = True, max_stages: int = 3) -> None:
         self.enabled = enabled
         self.max_stages = max_stages
-        self._results: Dict[str, str] = {}
+        self._results: Dict[str, Dict[str, Any]] = {}
 
     @staticmethod
     def image_hash(b64: str) -> str:
         return hashlib.sha256(b64.encode("ascii")).hexdigest()[:16]
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> Optional[Dict[str, Any]]:
         if not self.enabled:
             return None
         return self._results.get(key)
 
-    def store(self, key: str, value: str) -> None:
+    def store(self, key: str, value: Dict[str, Any]) -> None:
         if not self.enabled:
+            return
+        # do not cache error frames — only successful stage results
+        if not isinstance(value, dict) or value.get("type") != "stage_result":
             return
         # keep recent results bounded
         if len(self._results) >= self.max_stages * 8:
@@ -65,7 +98,7 @@ class KVCacheManager:
     def hits(self) -> int:
         return sum(1 for _ in self._results.values())
 
-    def peek(self, key: str) -> Optional[str]:
+    def peek(self, key: str) -> Optional[Dict[str, Any]]:
         return self._results.get(key)
 
     def clear(self) -> None:
