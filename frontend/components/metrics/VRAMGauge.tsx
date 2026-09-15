@@ -27,7 +27,11 @@ export function VRAMGauge({ used, total }: VRAMGaugeProps) {
       </div>
       <div className="text-[10px] font-mono uppercase tracking-wider text-virgo-muted">VRAM</div>
       <div className="font-mono text-sm" style={{ color }}>
-        {used > 0 ? `${used.toFixed(0)} / ${total.toFixed(0)} MB` : `— / ${total.toFixed(0)} MB`}
+        {total > 0
+          ? used > 0
+            ? `${used.toFixed(0)} / ${total.toFixed(0)} MB`
+            : `— / ${total.toFixed(0)} MB`
+          : "no GPU"}
       </div>
     </GlassCard>
   );
