@@ -1,8 +1,9 @@
 services:
   ollama:
     image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
+    # Not published to the host — the backend reaches it on the internal
+    # Docker network. Remove the `ports:` mapping to avoid port wars with a
+    # locally-running Ollama.
     volumes:
       - ollama_data:/root/.ollama
     deploy:
@@ -32,8 +33,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    environment:
-      NEXT_PUBLIC_API_BASE: http://localhost:8000
+      args:
+        # Inlined at build time by Next.js (NEXT_PUBLIC_*).
+        NEXT_PUBLIC_API_BASE: http://localhost:8000
     ports:
       - "3000:3000"
     depends_on:
