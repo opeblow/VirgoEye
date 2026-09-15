@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class HallucinationFlag(BaseModel):
@@ -10,6 +10,12 @@ class HallucinationFlag(BaseModel):
     claim: str
     issue: str
     severity: str = Field(..., description="minor|major|critical")
+
+    @model_validator(mode="after")
+    def _check_severity(self) -> "HallucinationFlag":
+        if self.severity not in {"minor", "major", "critical"}:
+            raise ValueError(f"severity must be minor|major|critical, got {self.severity!r}")
+        return self
 
 
 class Correction(BaseModel):
@@ -31,3 +37,12 @@ class VerificationReport(BaseModel):
     corrections: List[Correction]
     critic_confidence: float = Field(..., ge=0.0, le=1.0)
     critic_notes: str
+
+    @model_validator(mode="after")
+    def _check_count(self) -> "VerificationReport":
+        if self.hallucination_count != len(self.hallucinations):
+            raise ValueError(
+                f"hallucination_count ({self.hallucination_count}) does not match "
+                f"hallucinations length ({len(self.hallucinations)})"
+            )
+        return self
