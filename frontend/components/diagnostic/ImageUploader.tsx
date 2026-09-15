@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GlassCard } from "@/components/shared/GlassCard";
 import { cn } from "@/lib/utils";
 
@@ -41,6 +41,23 @@ export function ImageUploader({
     setLocalPreview(null);
     onClear();
   };
+
+  const handlePaste = useCallback(
+    (e: ClipboardEvent) => {
+      if (disabled) return;
+      const item = Array.from(e.clipboardData?.items ?? []).find((i) =>
+        i.type.startsWith("image/")
+      );
+      const file = item?.getAsFile();
+      if (file) handleFile(file);
+    },
+    [disabled, handleFile]
+  );
+
+  useEffect(() => {
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, [handlePaste]);
 
   return (
     <GlassCard className="flex flex-col gap-4" noPad>
