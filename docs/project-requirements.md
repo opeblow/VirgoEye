@@ -70,6 +70,39 @@ Rules and checks:
 - [ ] Audio is audible / captions present for the demo portion.
 - [ ] Uploaded to an unlisted/public link and linked from the Devpost page.
 
+### 2.3 Story & impact hook (Earth Forward)
+
+**One-line hook (lead with this):**
+> A satellite can watch every acre. It takes a mind that doubts itself to
+> actually see.
+
+**Pitch (Devpost about section / video opening):**
+> In one growing season, a 2% patch of water-stressed crop becomes a failed
+> harvest. A flood that swallows one neighborhood reshapes an entire town.
+> Fast-thinking AI glances at the image and answers — confident, wrong, and
+> too late. Virgo-Eye is slow on purpose: it maps every region, reasons
+> spatially then relationally, criticizes its own conclusions, and only then
+> emits a calibrated verdict — severity, confidence, and an evidence chain you
+> can check. Not "there might be a problem," but "this 2% patch, right here,
+> is water stress; here's the evidence; here's the confidence; here's what to
+> check next."
+
+**Three concrete impact stories (pick the best 1–2 for the video):**
+- **Sustainable agriculture** — smallholder farmers and agronomists catch
+  crop stress and disease before it spreads across the season: earlier
+  intervention, less pesticide, more yield.
+- **Ecosystem monitoring** — rangers and researchers detect deforestation
+  clearings, habitat fragmentation, and disturbance signals in drone and
+  satellite imagery that pattern-matching MVAs gloss over.
+- **Climate resilience** — post-flood response teams get calibrated damage
+  maps (severity + evidence, not guesswork), so aid and crews reach the right
+  block first.
+
+**Why judges should care (ties to rubric):** the "glance-and-answer" failure
+mode is a real, current limitation of fast-thinking multimodal models in
+high-stakes domains — this is an *impact* story AND a *research* story, which
+is the originality+track combination past winners didn't have.
+
 ### 2.2 Devpost project page
 
 The Devpost project page must be filled out, including a repo link and (if
@@ -77,17 +110,9 @@ applicable) a live-app link.
 
 Required sections and Virgo-Eye (Earth Forward) content:
 
-- **Title:** Virgo-Eye — the reasoning-first Earth-Forward diagnostic engine
-- **Tagline:** A 4-stage Chain-of-Visual-Thought (CoVT) pipeline that maps,
-  deliberates, criticizes, and emits calibrated verdicts on environmental
-  imagery — ecosystem monitoring, sustainable agriculture, wildlife
-  conservation, and climate/disaster assessment.
-- **Description:** Fast VLMs glance and answer; Virgo-Eye maps → deliberates →
-  verifies → synthesizes a calibrated verdict, streaming every stage to a
-  real-time UI. Built to spot the sub-pixel signals pattern-matching misses —
-  crop stress, land-cover change, habitat disturbance, post-disaster damage —
-  and audit its own reasoning. Demo mode runs with zero GPU; switch to
-  Ollama/vLLM for real inference on Qwen2-VL-7B (4-bit AWQ).
+- **Title:** Virgo-Eye — a satellite can watch every acre; it takes a mind that doubts itself to actually see
+- **Tagline:** The reasoning-first Earth-Forward diagnostic engine — a 4-stage Chain-of-Visual-Thought (CoVT) pipeline that maps, deliberates, criticizes, and emits calibrated verdicts on environmental imagery.
+- **Description:** Fast-thinking VLMs glance at an image and answer — confident, wrong, and too late. Virgo-Eye is slow on purpose: it maps every region (Stage 1), reasons spatially then relationally (Stage 2), criticizes its own conclusions (Stage 3), and only then emits a calibrated verdict — severity, confidence, and an evidence chain you can check (Stage 4). Built to catch the sub-pixel signals pattern-matching misses — crop stress, land-cover change, habitat disturbance, post-disaster damage. Demo mode runs with zero GPU; switch to Ollama/vLLM for real inference on Qwen2-VL-7B (4-bit AWQ).
 - **Submission gallery / images:** upload the favicon
   (`frontend/app/icon.svg`), a UI screenshot with bboxes + thought stream +
   verdict, and a metrics gauge close-up.
