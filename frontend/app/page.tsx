@@ -63,7 +63,14 @@ const FEATURES = [
   },
 ];
 
-const DOMAINS = ["PCB & electronics", "Medical imaging", "Architecture plans", "Satellite / aerial"];
+const DOMAINS = [
+  "Ecosystem monitoring (satellite)",
+  "Sustainable agriculture",
+  "Wildlife conservation",
+  "Climate & disaster assessment",
+  "PCB & electronics",
+  "Medical imaging",
+];
 
 export default function LandingPage() {
   return (

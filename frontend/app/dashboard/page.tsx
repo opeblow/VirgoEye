@@ -20,12 +20,31 @@ import { useGPUMetrics } from "@/hooks/useGPUMetrics";
 import type { DetectedEntity } from "@/lib/types";
 import { API_BASE } from "@/lib/api";
 
-type Domain = "auto" | "pcb" | "medical" | "architecture" | "satellite";
+type Domain =
+  | "auto"
+  | "satellite"
+  | "agriculture"
+  | "wildlife"
+  | "disaster"
+  | "pcb"
+  | "medical"
+  | "architecture";
+
+const DOMAINS: Domain[] = [
+  "auto",
+  "satellite",
+  "agriculture",
+  "wildlife",
+  "disaster",
+  "pcb",
+  "medical",
+  "architecture",
+];
 
 export default function Dashboard() {
   const { state, status, start, reset } = useDiagnosticPipeline();
   const gpu = useGPUMetrics();
-  const [domain, setDomain] = useState<Domain>("pcb");
+  const [domain, setDomain] = useState<Domain>("satellite");
   const [health, setHealth] = useState<{ model: string; demo_mode: boolean } | null>(null);
   const [loadedB64, setLoadedB64] = useState<string | null>(null);
 
@@ -117,7 +136,7 @@ export default function Dashboard() {
             />
 
             <div className="flex flex-wrap gap-1.5">
-              {(["auto", "pcb", "medical", "architecture", "satellite"] as Domain[]).map((d) => (
+              {DOMAINS.map((d) => (
                 <button
                   key={d}
                   onClick={() => setDomain(d)}

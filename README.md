@@ -23,8 +23,15 @@ produce a calibrated verdict** — while streaming every stage to a real-time UI
 
 </div>
 
-Targets where pattern-matching fails: **PCB fault detection, medical imaging,
-architectural plan analysis, satellite/aerial change detection.**
+Targets where pattern-matching fails: **ecosystem & land-cover monitoring
+(satellite/aerial), sustainable agriculture (crop stress/disease), wildlife
+conservation, climate & disaster damage assessment**, plus PCB fault
+detection, medical imaging, and architectural plan analysis.
+
+**Built for the NextStep Hacks 2026 theme — Earth Forward.** Submission
+requirements and the full competition game plan live in
+[`docs/project-requirements.md`](docs/project-requirements.md) and
+[`docs/nextstep-hacks-2026.md`](docs/nextstep-hacks-2026.md).
 
 ## The 4-stage CoVT pipeline
 
@@ -210,6 +217,8 @@ VirgoEye/
 │
 └── docs/
     ├── submission.md              # ML write-up (the "why")
+    ├── project-requirements.md    # hackathon deliverables + judging rubric + pre-deadline checklist
+    ├── nextstep-hacks-2026.md     # competition intel: theme, sponsors, past winners, game plan
     ├── architecture.md            # diagrams + SSE contract
     └── benchmarks.md              # speed numbers + how to reproduce
 ```

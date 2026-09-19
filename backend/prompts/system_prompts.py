@@ -47,6 +47,30 @@ DOMAIN_CONTEXT_PROMPTS = {
         "anomalies, water discoloration, man-made patterns in natural regions, and "
         "infrastructure damage (roof breaches, road cuts, collapsed structures)."
     ),
+    "agriculture": (
+        "Domain context: This image is an agricultural scene (field, orchard, or controlled "
+        "environment). Pay special attention to: canopy/mosaic texture irregularities, "
+        "water-stressed or chlorotic patches (paler yellows/greens), pest or disease lesions, "
+        "irregular planting lines, soil moisture patterns, and irrigation coverage gaps. "
+        "Spatially contiguous stress patches smaller than 2% of the frame may still be "
+        "significant for early intervention."
+    ),
+    "wildlife": (
+        "Domain context: This image is a wildlife or ecosystem-monitoring survey (drone, "
+        "camera-trap, or aerial transect). Pay special attention to: animal counts and "
+        "species classification, unusual congregation or displacement patterns, habitat "
+        "fragmentation, fresh disturbance (logging roads, fires, poaching signs), and "
+        "contrast between natural and man-made structure. Flag population-level anomalies "
+        "with calibrated confidence, never single-image certainty."
+    ),
+    "disaster": (
+        "Domain context: This image is a post-disaster damage assessment scene (flood, fire, "
+        "storm, or earthquake, captured from aerial/satellite or ground view). Pay special "
+        "attention to: structural collapse and roof breaches, floodwater extent and debris, "
+        "burn scars and ember spots, road/access cuts, downed power or crossing lines, and "
+        "persons-in-unprotected-areas. Severity must be calibrated: distinguish damage from "
+        "benign shadow, and never mark a person as debris."
+    ),
     "auto": (
         "Domain context: The image domain is unknown. Apply general visual diagnostic "
         "principles: establish a systematic scan grid, note spatial relationships, and "

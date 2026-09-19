@@ -38,6 +38,24 @@ DOMAIN_PATTERNS = {
         "units": "scene",
         "anomaly_name": "land-cover anomaly",
     },
+    "agriculture": {
+        "context": "agricultural field / crop canopy",
+        "mid_words": ["crop", "canopy", "field", "irrigation"],
+        "units": "crop region",
+        "anomaly_name": "crop stress / disease patch",
+    },
+    "wildlife": {
+        "context": "wildlife / ecosystem survey imagery",
+        "mid_words": ["transect", "habitat", "disturbance", "fauna"],
+        "units": "survey area",
+        "anomaly_name": "habitat / population disturbance",
+    },
+    "disaster": {
+        "context": "post-disaster damage assessment scene",
+        "mid_words": ["debris", "flood", "burn", "breach"],
+        "units": "affected area",
+        "anomaly_name": "structural / environmental damage",
+    },
     "auto": {
         "context": "general image requiring visual diagnosis",
         "mid_words": ["region", "feature", "boundary", "alias artifact"],

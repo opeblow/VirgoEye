@@ -109,7 +109,7 @@ export function ImageUploader({
                 Drag &amp; drop an image, paste, or click to browse
               </p>
               <p className="text-xs text-virgo-muted mt-1">
-                PCB / medical / architecture / satellite
+                Earth Forward: satellite / agriculture / wildlife / disaster · also PCB / medical
               </p>
             </div>
           </>

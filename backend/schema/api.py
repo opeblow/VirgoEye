@@ -16,8 +16,21 @@ class AnalyzeRequest(BaseModel):
         description="Base64 encoded image",
     )
     domain: Literal[
-        "auto", "pcb", "medical", "architecture", "satellite"
-    ] = Field(default="auto", description="auto|pcb|medical|architecture|satellite")
+        "auto",
+        "satellite",
+        "agriculture",
+        "wildlife",
+        "disaster",
+        "pcb",
+        "medical",
+        "architecture",
+    ] = Field(
+        default="auto",
+        description=(
+            "auto|satellite|agriculture|wildlife|disaster|pcb|medical|"
+            "architecture"
+        ),
+    )
     detail_level: Literal["low", "medium", "high"] = Field(
         default="high", description="low|medium|high"
     )
