@@ -5,7 +5,9 @@
 
 ## Methodology
 
-- Sample images: `scripts/generate_test_data.py` (PCB, X-ray, blueprint).
+- Sample images: `scripts/generate_test_data.py` (Earth-Forward set:
+  satellite land-cover, crop stress, wildlife disturbance, disaster flood;
+  plus PCB, X-ray, blueprint).
 - `scripts/benchmark.py` runs the full 4-stage pipeline per image and reports
   wall-clock end-to-end latency from the orchestrator.
 - Real-inference metrics (tokens/sec, VRAM) come from the `metrics` SSE frame
@@ -18,6 +20,10 @@
 | pcb_fault.png | ~350 | deterministic, pixel-statistics driven |
 | xray_sample.png | ~340 | |
 | blueprint_sample.png | ~350 | |
+| satellite_landcover.png | ~350 | |
+| crop_stress.png | ~350 | |
+| wildlife_disturbance.png | ~350 | |
+| disaster_flood.png | ~355 | |
 
 ## Real inference — template (fill after running on target GPU)
 
