@@ -50,8 +50,8 @@ The existing GPU/Ollama compose file is not the hosted Anthropic demo setup.
 
 A VPS preview has been deployed with a user-approved $4 application budget,
 30 total admissions and anonymous access (`VIRGO_OPEN_ACCESS=true`). Usage persists across container restarts.
-Final competition eligibility and a stable submission URL remain prerequisites
-for submission. See [VPS_DEPLOYMENT.md](VPS_DEPLOYMENT.md).
+The permanent public address is https://virgoeye.useroot.xyz. Final competition
+eligibility still needs to be confirmed before submission. See [VPS_DEPLOYMENT.md](VPS_DEPLOYMENT.md).
 
 ## Local release verification (20 September 2026)
 
@@ -65,4 +65,4 @@ validation or a performance guarantee.
 A 3:11 narrated demo was rendered in the separate videos/virgoeye-demo project.
 It uses real recorded product interactions, local speech and a user-selected music
 bed. Recordings and rendered media are not included in this source repository.
-The app now has a temporary HTTPS preview; no submitted entry is recorded here.
+The app now uses its permanent HTTPS domain; no submitted entry is recorded here.

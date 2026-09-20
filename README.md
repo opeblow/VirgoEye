@@ -4,7 +4,7 @@
 
 VirgoEye turns a crop photograph into visible observations, approximate image regions, and a practical next inspection step. It helps someone prepare for a field check while keeping the limits of a single photograph visible.
 
-[Quick start](#quick-start) · [How it works](#how-it-works) · [Evaluation](#evaluation-and-limitations) · [Public deployment](docs/PUBLIC_DEMO.md) · [Sample attribution](frontend/public/samples/ATTRIBUTION.md)
+[Live app](https://virgoeye.useroot.xyz) · [Quick start](#quick-start) · [How it works](#how-it-works) · [Evaluation](#evaluation-and-limitations) · [Public deployment](docs/PUBLIC_DEMO.md) · [Sample attribution](frontend/public/samples/ATTRIBUTION.md)
 
 ## What is built
 

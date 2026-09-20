@@ -20,10 +20,15 @@ docker run -d --name virgoeye-backend --network virgoeye \
   --log-opt max-size=5m --log-opt max-file=2 \
   --env-file "$base/backend.env" -v "$base/data:/data" \
   "virgoeye-backend:$release"
+set -- -p 127.0.0.1:3011:3000
+# Optional private interface for a hosting provider's HTTPS reverse proxy.
+if [ -n "${VIRGO_PROXY_IP:-}" ]; then
+  set -- "$@" -p "$VIRGO_PROXY_IP:3012:3000"
+fi
 docker run -d --name virgoeye-frontend --network virgoeye \
   --restart unless-stopped --memory 512m --cpus 0.8 --pids-limit 128 \
   --cap-drop ALL --security-opt no-new-privileges --read-only \
   --tmpfs /tmp:rw,noexec,nosuid,size=32m \
   --tmpfs /app/.next/cache:rw,noexec,nosuid,uid=1000,gid=1000,size=32m \
   --log-opt max-size=5m --log-opt max-file=2 \
-  -p 127.0.0.1:3011:3000 "virgoeye-frontend:$release"
+  "$@" "virgoeye-frontend:$release"

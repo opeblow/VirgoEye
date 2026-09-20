@@ -21,7 +21,34 @@ users, with read-only filesystems, limited memory and rotating logs. Back up
 the persistent usage database using SQLite's backup API, not by deleting or
 resetting it. For rollback, run the script with the prior image tag.
 
-## Temporary preview
+## Permanent domain
+
+The public address is **https://virgoeye.useroot.xyz**. Vercel manages DNS;
+TierHive's Frankfurt HAProxy terminates HTTPS and routes to the existing VPS
+at `10.3.245.2:3012`. The apex `useroot.xyz` remains attached to its existing
+Vercel project. The `agent` and `api` subdomains are unchanged.
+
+DNS records added under `useroot.xyz`:
+
+- `virgoeye` A record → `57.129.106.133` (TTL 60).
+- `_tierhive-validation.virgoeye` TXT → the token shown in TierHive's domain
+  verification screen. Keep this record for ownership verification.
+
+Deploy subsequent releases with the private proxy interface enabled:
+
+```sh
+VIRGO_PROXY_IP=10.3.245.2 sh deploy/start-vps.sh RELEASE
+```
+
+The frontend also retains its loopback port 3011 for local checks. The analysis
+backend remains reachable only within Docker. Set `CORS_ORIGINS` to the HTTPS
+public origin. The persistent data directory and budget configuration must be
+preserved. The temporary tunnel is disabled. HTTPS certificate validation,
+HTTP-to-HTTPS redirection, public health and a live browser inspection with
+streaming progress were verified on the permanent domain. The sample inspection
+completed in 30.0 seconds (one functional check, not a performance guarantee).
+
+## Temporary preview (fallback only)
 
 The supplied systemd unit runs an outbound SSH tunnel through localhost.run.
 Create the unprivileged `virgo-preview` system user, copy the unit into
@@ -60,7 +87,8 @@ budget behavior and release checks.
   compression from holding back live progress until analysis completes.
 - Public HTTPS smoke test with normal compression negotiation: first SSE
   event in 1.94 seconds, full live affected-leaf inspection in 32.05 seconds.
-  Both analysis routes rejected an invalid access code. These are single-run
+  This earlier check used code-gated access; anonymous access was verified
+  afterward. These are single-run
   functional measurements, not performance guarantees.
 - The existing unrelated VPS service remains running. No VPS resize or paid
   hosting service was added. The existing VPS balance still funds its runtime.
