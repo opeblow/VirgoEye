@@ -98,7 +98,8 @@ async def analyze(req: AnalyzeRequest) -> StreamingResponse:
         _event_stream(req),
         media_type="text/event-stream",
         headers={
-            "Cache-Control": "no-cache",
+            # Prevent proxy compression from buffering small SSE progress updates.
+            "Cache-Control": "no-cache, no-transform",
             "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
         },

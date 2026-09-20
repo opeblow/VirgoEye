@@ -1,0 +1,19 @@
+[Unit]
+Description=VirgoEye temporary HTTPS preview tunnel
+After=network-online.target docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=virgo-preview
+StateDirectory=virgoeye-preview
+ExecStart=/usr/bin/ssh -T -o BatchMode=yes -o IdentitiesOnly=yes -o IdentityFile=none -o IdentityAgent=none -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/var/lib/virgoeye-preview/known_hosts -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -o ExitOnForwardFailure=yes -R 80:127.0.0.1:3011 nokey@localhost.run -- --output json
+Restart=always
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

@@ -45,8 +45,10 @@ The existing GPU/Ollama compose file is not the hosted Anthropic demo setup.
 - Record the actual deployed commit and model; disclose prior work and the
   small evaluation's limitations in the submission.
 
-Hosting destination, user-approved budget and final competition eligibility
-remain release prerequisites. No public deployment has been made yet.
+A VPS preview has been deployed with a user-approved $4 application budget,
+30 total admissions and an access code. Usage persists across container restarts.
+Final competition eligibility and a stable submission URL remain prerequisites
+for submission. See [VPS_DEPLOYMENT.md](VPS_DEPLOYMENT.md).
 
 ## Local release verification (20 September 2026)
 
@@ -59,4 +61,5 @@ validation or a performance guarantee.
 
 A 3:11 narrated demo was rendered in the separate videos/virgoeye-demo project.
 It uses real recorded product interactions, local speech and a user-selected music
-bed. Recordings and rendered media are not included in this source repository. No public app link or submitted entry exists yet.
+bed. Recordings and rendered media are not included in this source repository.
+The app now has a temporary HTTPS preview; no submitted entry is recorded here.

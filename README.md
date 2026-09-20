@@ -139,6 +139,8 @@ CI runs backend tests, report export checks, TypeScript checks, a production bui
 
 Read [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) before exposing the app. Public mode requires a server-side access code, persistent admission/budget storage, configured model prices and an approved budget. The application budget is a conservative estimate, not a guarantee about provider billing. Use a provider-side spending limit too.
 
+For a CPU-only server with the Anthropic API, see the [VPS deployment guide](docs/VPS_DEPLOYMENT.md). It includes production containers, persistent usage storage, restart behavior, and temporary HTTPS preview limitations.
+
 The current public guard is designed for one backend process with persistent storage. Production use still needs HTTPS, operational monitoring and deployment verification. Keep credentials, usage ledgers and private images out of Git.
 
 ## Attribution and contributions
