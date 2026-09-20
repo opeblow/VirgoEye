@@ -21,7 +21,7 @@ psutil>=5.9.0
 pynvml>=11.5.0
 
 # Agent orchestration
-pydantic-ai>=0.0.16
+pydantic-ai>=2.43.0
 
 # Tests
 pytest>=8.2.0
