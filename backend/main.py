@@ -74,7 +74,7 @@ async def health() -> Dict[str, Any]:
     snap = orchestrator.gpu.snapshot()
     return {
         "status": "ok",
-        "access_code_required": config.PUBLIC_MODE,
+        "access_code_required": config.PUBLIC_MODE and not config.OPEN_ACCESS,
         "model": orchestrator.model_name,
         "ollama": orchestrator.ollama_ok,
         "quantization": orchestrator._quantization,

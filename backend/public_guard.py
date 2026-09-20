@@ -12,11 +12,12 @@ class GuardError(RuntimeError):
         super().__init__(message);self.status=status
 
 class PublicGuard:
-    def __init__(self,path,code,max_analyses,budget,input_rate,output_rate):
-        if not code or max_analyses < 1 or not all(math.isfinite(n) and n > 0 for n in (budget, input_rate, output_rate)):
+    def __init__(self,path,code,max_analyses,budget,input_rate,output_rate,*,require_access_code=True):
+        if (require_access_code and not code) or max_analyses < 1 or not all(math.isfinite(n) and n > 0 for n in (budget, input_rate, output_rate)):
             raise ValueError("Public mode requires an access code, analysis limit, budget and verified model prices.")
         self.path=Path(path);self.path.parent.mkdir(parents=True,exist_ok=True)
         self.code=code;self.max_analyses=max_analyses
+        self.require_access_code=require_access_code
         self.budget=math.floor(budget*1_000_000)
         self.input_rate=input_rate;self.output_rate=output_rate
         with self._connect() as db:
@@ -31,7 +32,7 @@ class PublicGuard:
         finally:
             db.close()
     def admit(self,code):
-        if not hmac.compare_digest(code.encode(),self.code.encode()):
+        if self.require_access_code and not hmac.compare_digest(code.encode(),self.code.encode()):
             raise GuardError("Enter the judge access code to run an inspection.",401)
         with self._connect() as db:
             db.execute('BEGIN IMMEDIATE')
@@ -60,5 +61,6 @@ def get_public_guard():
         raise ValueError("Public mode requires a live Anthropic connection.")
     if _guard is None:
         _guard=PublicGuard(config.USAGE_DB,config.ACCESS_CODE,config.MAX_ANALYSES,
-            config.DEMO_BUDGET_USD,config.INPUT_USD_PER_M,config.OUTPUT_USD_PER_M)
+            config.DEMO_BUDGET_USD,config.INPUT_USD_PER_M,config.OUTPUT_USD_PER_M,
+            require_access_code=not config.OPEN_ACCESS)
     return _guard

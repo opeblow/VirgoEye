@@ -79,6 +79,7 @@ VIRGO_DEMO_MODE = _env_bool("VIRGO_DEMO_MODE", False)
 CRITIC_PARALLEL_AGENTS = _env_int("CRITIC_PARALLEL_AGENTS", 1)
 # Public demo safeguards. Public mode must be explicitly configured before launch.
 PUBLIC_MODE = _env_bool("VIRGO_PUBLIC_MODE", False)
+OPEN_ACCESS = _env_bool("VIRGO_OPEN_ACCESS", False)
 ACCESS_CODE = _env("VIRGO_ACCESS_CODE", "")
 MAX_ANALYSES = _env_int("VIRGO_MAX_ANALYSES", 10)
 DEMO_BUDGET_USD = _env_float("VIRGO_DEMO_BUDGET_USD", 0.0)

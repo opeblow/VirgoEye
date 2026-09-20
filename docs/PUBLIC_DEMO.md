@@ -11,14 +11,17 @@ Use one backend process and a persistent volume for `VIRGO_USAGE_DB`. Multiple
 replicas with separate databases would each have their own limits. Do not delete
 the database on restart: admissions and reservations intentionally persist.
 
-Configure `VIRGO_PUBLIC_MODE=true`, a nonempty `VIRGO_ACCESS_CODE`, the approved
+Configure `VIRGO_PUBLIC_MODE=true`, the approved
 `VIRGO_MAX_ANALYSES` and `VIRGO_DEMO_BUDGET_USD`, plus verified input/output USD
 prices per million tokens for the configured Anthropic model. Missing budget,
-prices, live key or access code causes startup to fail. Keep secrets server-only.
+prices or live key causes startup to fail. By default a nonempty `VIRGO_ACCESS_CODE`
+is also required. Set `VIRGO_OPEN_ACCESS=true` to explicitly allow anonymous
+inspections while preserving all budget and admission limits. Keep secrets server-only.
 
-Both analysis routes require the access code. A global two-inspections-per-minute
+Both analysis routes enforce the same admission limits. When open access is off,
+both also require the access code. A global two-inspections-per-minute
 limit and a persistent total admission limit apply before analysis. Invalid and
-failed inspections still consume admissions. The frontend asks for the code but
+failed inspections still consume admissions. When required, the frontend asks for the code but
 does not store it persistently or include it in exports.
 
 Before every model generation, the backend counts input tokens and reserves the
@@ -38,7 +41,7 @@ The existing GPU/Ollama compose file is not the hosted Anthropic demo setup.
 
 - Run backend tests, frontend build, and report export tests.
 - Check one live standard sample; ensure no extra review is claimed.
-- Confirm a wrong access code is rejected on both routes.
+- Confirm both routes match the configured access mode and preserve usage limits.
 - Confirm limits survive a backend restart using a temporary test database.
 - Verify public URL, browser streaming, report download, mobile layout and
   sample attribution from a fresh browser session before sharing.
@@ -46,7 +49,7 @@ The existing GPU/Ollama compose file is not the hosted Anthropic demo setup.
   small evaluation's limitations in the submission.
 
 A VPS preview has been deployed with a user-approved $4 application budget,
-30 total admissions and an access code. Usage persists across container restarts.
+30 total admissions and anonymous access (`VIRGO_OPEN_ACCESS=true`). Usage persists across container restarts.
 Final competition eligibility and a stable submission URL remain prerequisites
 for submission. See [VPS_DEPLOYMENT.md](VPS_DEPLOYMENT.md).
 

@@ -41,7 +41,7 @@ an IP-based free hostname cannot satisfy a provider's DNS TXT ownership check.
 Vercel can host the frontend, but the VPS backend still needs a reachable,
 secure endpoint and persistent budget storage.
 
-Before sharing, verify both analysis routes reject an incorrect code, run a
+Before sharing, verify both analysis routes enforce the configured access mode, run a
 live sample through the public frontend, check streaming and report download,
 and confirm ledger records survive backend restart. See PUBLIC_DEMO.md for
 budget behavior and release checks.
@@ -49,11 +49,12 @@ budget behavior and release checks.
 ## Verified preview configuration — 20 September 2026
 
 - Claude Sonnet 5; $4 conservative reservation budget; 30 total admissions;
-  two admissions per minute; access code required on both analysis endpoints.
+  two admissions per minute; anonymous access enabled on both analysis endpoints
+  by explicit user request. Budget and admission limits remain active.
 - Input/output prices: $2/$10 per million tokens, checked against
   [Anthropic's pricing](https://platform.claude.com/docs/en/about-claude/pricing).
 - Persistent ledger retained exactly across a container replacement.
-- 80 backend tests passed inside the deployed Python 3.12 image; frontend
+- 84 backend tests passed inside the deployed Python 3.12 image; frontend
   production build and standalone report-export test passed.
 - SSE responses use `Cache-Control: no-cache, no-transform` to prevent proxy
   compression from holding back live progress until analysis completes.
@@ -64,7 +65,12 @@ budget behavior and release checks.
 - The existing unrelated VPS service remains running. No VPS resize or paid
   hosting service was added. The existing VPS balance still funds its runtime.
 
-Keep the access code in the local ignored `.runtime/deployment-access.txt`
-file and the server's protected environment file. Do not commit it. Treat the
+The current preview has no access code. If code-gated access is enabled again,
+keep its code in an ignored local file and the server's protected environment
+file. Do not commit it. Treat the
 [free tunnel's changing address](https://localhost.run/docs/forever-free/) as a
 preview-only limitation; it is unsuitable as the final judging URL.
+
+The free provider rotated the initial hostname during the active tunnel session.
+An active SSH connection does not guarantee that an older hostname still works.
+Read the most recent `tcpip-forward` address from the service journal.
