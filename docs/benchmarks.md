@@ -1,3 +1,5 @@
+> Historical planning/reference document. For current behavior, setup and evidence, use the [README](../README.md) and [evaluation results](evaluation/reliability/RESULTS.md). Earlier targets and claims below are not validated product results.
+
 # Speed Benchmarks
 
 > Representative numbers. Fill in with your hardware. Record via

@@ -15,7 +15,7 @@ export function Footer({ gpuUtil, vramUsed, vramTotal, className }: FooterProps)
         className
       )}
     >
-      <span>Virgo-Eye v2.0 &middot; Chain-of-Visual-Thought Engine</span>
+      <span>Virgo-Eye v2.0 &middot; Crop inspection workspace</span>
       <div className="flex items-center gap-4">
         {vramTotal !== undefined && vramTotal > 0 && (
           <span>
@@ -23,7 +23,7 @@ export function Footer({ gpuUtil, vramUsed, vramTotal, className }: FooterProps)
             {(vramUsed ?? 0).toFixed(0)}/{vramTotal.toFixed(0)} MB
           </span>
         )}
-        <span className="text-virgo-dim">SPEED Virgo Challenge</span>
+        <span className="text-virgo-dim">Earth Forward · Inspection support</span>
       </div>
     </footer>
   );

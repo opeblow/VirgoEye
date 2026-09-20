@@ -1,3 +1,5 @@
+> Historical planning/reference document. For current behavior, setup and evidence, use the [README](../README.md) and [evaluation results](evaluation/reliability/RESULTS.md). Earlier targets and claims below are not validated product results.
+
 # Project and Submission Requirements
 
 **Hackathon:** NextStep Hacks 2026 (HackAlphaX, on Devpost) — submit via the

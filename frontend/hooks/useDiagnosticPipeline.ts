@@ -65,14 +65,15 @@ function reducer(s: PipelineState, a: Action): PipelineState {
         return { ...s, stage: "error", error: ev.message ?? "unknown" };
       }
       if (ev.stage === "mapping" && ev.type === "stage_result") {
-        return { ...s, mapData: ev.data as unknown as DiagnosticMap };
+        return { ...s, mapData: ev.data as unknown as DiagnosticMap, stage: "deliberation" };
       }
       if (ev.stage === "deliberation" && ev.type === "thought") {
         return { ...s, thoughtText: s.thoughtText + (ev.chunk ?? "") };
       }
       if (ev.stage === "deliberation" && ev.type === "stage_result") {
-        return { ...s, stage: "critic" };
+        return { ...s, stage: "critic", thoughtText: typeof ev.data?.thought_chain === "string" ? ev.data.thought_chain : s.thoughtText };
       }
+      if (ev.type === "review_skipped") return { ...s, stage: "synthesis", criticData: null };
       if (ev.stage === "critic" && ev.type === "stage_result") {
         return {
           ...s,
@@ -115,10 +116,10 @@ export function useDiagnosticPipeline() {
   });
 
   const start = useCallback(
-    (imageBase64: string, domain = "auto") => {
+    (imageBase64: string, domain = "auto", extraReview = false, accessCode = "") => {
       const url = `data:image/jpeg;base64,${imageBase64}`;
       dispatch({ type: "START", imageUrl: url, base64: imageBase64 });
-      sseStart(imageBase64, domain, "high");
+      sseStart(imageBase64, domain, "high", extraReview, accessCode);
     },
     [sseStart]
   );

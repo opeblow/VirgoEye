@@ -16,7 +16,8 @@ First off — thanks for taking the time to contribute.
 
    ```bash
    # backend
-   cd backend && pip install -r requirements.txt && python -m uvicorn backend.main:app --port 8000
+   python -m pip install -r backend/requirements.txt
+   VIRGO_DEMO_MODE=true python -m uvicorn backend.main:app --port 8000
 
    # frontend
    cd frontend && npm install && npm run dev

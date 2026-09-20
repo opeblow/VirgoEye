@@ -1,250 +1,154 @@
-<div align="center">
+# VirgoEye
 
-<img src="./frontend/app/icon.svg" alt="Virgo-Eye favicon" width="96" />
+**See the concern. Plan the next check.**
 
-# Virgo-Eye
+VirgoEye turns a crop photograph into visible observations, approximate image regions, and a practical next inspection step. It helps someone prepare for a field check while keeping the limits of a single photograph visible.
 
-**Reasoning-first multimodal diagnostic engine on a 4-stage
-Chain-of-Visual-Thought (CoVT) pipeline.**
+[Quick start](#quick-start) · [How it works](#how-it-works) · [Evaluation](#evaluation-and-limitations) · [Public deployment](docs/PUBLIC_DEMO.md) · [Sample attribution](frontend/public/samples/ATTRIBUTION.md)
 
-Fast-thinking LLMs glance at an image and blurt out an answer. Virgo-Eye
-forces a vision-language model into slow, deliberate, observable reasoning:
-**map every entity → reason about relationships → verify against itself →
-produce a calibrated verdict** — while streaming every stage to a real-time UI.
+## What is built
 
-[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](backend/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=for-the-badge&logo=fastapi&logoColor=white)](backend/main.py)
-[![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=next.js&logoColor=white)](frontend/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](frontend/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](frontend/tsconfig.json)
-[![License](https://img.shields.io/badge/License-MIT-red?style=for-the-badge)](LICENSE)
-[![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=for-the-badge)](CONTRIBUTING.md)
+- **Accessible input:** upload a crop photo or choose a sourced healthy-labelled, damaged, or deliberately blurred example.
+- **Live analysis:** Anthropic-backed vision requests stream progress into the browser; configured provider failures are reported instead of replaced with simulated findings.
+- **Inspectable evidence:** select detected regions, read observations, and compare them with the image. Bounding boxes are approximate.
+- **Clear next steps:** findings and recommended actions appear first. Unusable or uncertain input requires further review; incomplete action text receives explicitly labelled general guidance.
+- **Portable reports:** download a standalone HTML report containing the photo, evidence, region references, next action and limitations. Open it in a browser or print it as PDF.
+- **Optional automated review:** the standard inspection uses three stages. An additional critic pass is available, but does not establish independent expert verification.
 
-</div>
-
-Targets where pattern-matching fails: **ecosystem & land-cover monitoring
-(satellite/aerial), sustainable agriculture (crop stress/disease), wildlife
-conservation, climate & disaster damage assessment**, plus PCB fault
-detection, medical imaging, and architectural plan analysis.
-
-**Built for the NextStep Hacks 2026 theme — Earth Forward.** Submission
-requirements and the full competition game plan live in
-[`docs/project-requirements.md`](docs/project-requirements.md) and
-[`docs/nextstep-hacks-2026.md`](docs/nextstep-hacks-2026.md).
-
-## The 4-stage CoVT pipeline
-
-```
-  image
-   │
-   ▼
- ┌─────────────────────────┐   stage: spatial semantic mapping
- │ STAGE 1  SpatialMapper  │──► DiagnosticMap JSON (entities + bboxes)
- └─────────────────────────┘
-   │
-   ▼
- ┌─────────────────────────┐   stage: chain-of-visual-thought
- │ STAGE 2  Deliberator    │──► <thought>…</thought> stream, SSE chunks
- └─────────────────────────┘
-   │
-   ▼
- ┌─────────────────────────┐   stage: critic verification
- │ STAGE 3  Critic         │──► VerificationReport (hallucinations, gaps)
- └─────────────────────────┘
-   │
-   ▼
- ┌─────────────────────────┐   stage: optimized synthesis
- │ STAGE 4  Synthesizer    │──► FinalVerdict (severity + confidence + evidence)
- └─────────────────────────┘
-   │
-   ▼
- metrics: latency, tokens/sec, VRAM, tok throughput
-```
-
-Every stage crosses a strict Pydantic v2 gate. Every SSE frame is tagged with
-its stage so the UI can render mapping boxes, a streaming thought terminal, a
-critic report, and calibrated gauges in real time.
+The focused product is a crop-inspection prototype for the Earth Forward theme. Other domain adapters and local inference paths remain in the repository as experimental infrastructure, not validated product capabilities.
 
 ## Quick start
 
-### Demo mode (zero GPU, full UI in 30 seconds)
-
-Demo mode is fully **image-aware**, computing real pixel statistics so the
-synthetic-but-structured output is meaningful. No model, no Ollama, no cloud.
+Use Python 3.12+, Node.js 20+, and npm. Run backend commands **from the repository root**.
 
 ```bash
-# terminal 1 — backend
-cd backend && pip install -r requirements.txt
-python -m uvicorn backend.main:app --port 8000
-
-# terminal 2 — frontend  (install once)
-cd frontend && npm install && npm run dev
-# open http://localhost:3000
+git clone https://github.com/opeblow/VirgoEye.git
+cd VirgoEye
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r backend/requirements.txt
+cp .env.example .env
 ```
 
-Upload any image, pick a domain, press **RUN DIAGNOSTIC**. The 4-stage
-pipeline streams into the UI immediately.
+On Windows, activate with `.venv\Scripts\activate` and use the equivalent environment-variable syntax for your shell.
 
-### Real inference (Ollama)
+### Real image analysis
+
+Set `ANTHROPIC_API_KEY` in the ignored `.env` file. Set `ANTHROPIC_WORKSPACE_ID` if required by your account, and choose `ANTHROPIC_MODEL` from models available to it. Keep credentials on the server; never use a `NEXT_PUBLIC_` variable for a secret.
 
 ```bash
-ollama pull qwen2-vl:7b
-ollama create virgo-qwen2-vl -f models/Modelfile
-# .env: VIRGO_MODEL=virgo-qwen2-vl
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
-If `VIRGO_MODEL=auto` (default) the backend probes Ollama at startup and picks
-the best vision model it finds. `scripts/setup_ollama.sh` automates this.
-
-### vLLM (production-grade batched inference)
+In another terminal:
 
 ```bash
-vllm serve Qwen/Qwen2-VL-7B-Instruct-AWQ --quantization awq --gpu-memory-utilization 0.85
-# .env: VLLM_ENABLED=true VLLM_MODEL=Qwen/Qwen2-VL-7B-Instruct-AWQ
+cd frontend
+npm ci
+npm run dev
 ```
 
-### Docker
+Open <http://localhost:3000/dashboard>. The frontend proxies `/api/v1/*` to the backend. Configure `BACKEND_URL` before starting or building Next.js if the backend address differs. API documentation is available at <http://127.0.0.1:8000/docs>.
+
+Live analysis sends the selected image to Anthropic and incurs provider charges. Upload only images you intend to share with that service. Three requests are used for a standard uncached inspection; enabling the critic adds a fourth. Repeated inputs may reuse earlier stage outputs, which the UI identifies. Set `ENABLE_KV_CACHE=false` for an uncached demonstration or evaluation.
+
+### Simulation without a key
 
 ```bash
-docker compose up --build
+VIRGO_DEMO_MODE=true python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
 ```
 
-## Stack
+This exercises the UI with synthetic, image-aware output. It is not real model inference or evidence of inspection accuracy. Keep simulation and live demonstrations clearly distinguished.
 
-| Layer | Tech |
-| --- | --- |
-| Backend | Python 3.12, FastAPI, SSE (`sse-starlette`), Pydantic v2, agent classes |
-| Models | Qwen2-VL-7B (4-bit AWQ), LLaVA-1.6-Mistral-7B fallback — via Ollama or vLLM |
-| Frontend | Next.js 15 App Router, React 19, TypeScript strict, Tailwind v3, framer-motion, lucide |
-| Speed | 4-bit AWQ quantization, KV-cache bookkeeping across stages, streaming token tracking, GPU monitors |
+For the demonstrated ports (backend 8011, frontend 3011), production-build commands and evaluation scripts, see [local setup](docs/RUN_LOCAL.md). Do not run a Next.js development server and production build against the same `.next` directory simultaneously.
+
+## How it works
+
+```text
+Crop photograph
+    ↓
+1. Map approximate regions
+    ↓
+2. Describe visible evidence and uncertainty
+    ↓
+3. Optional automated critic
+    ↓
+4. Synthesize a provisional finding and next check
+    ↓
+Deterministic review safeguards → UI + downloadable report
+```
+
+Pydantic schemas validate structured outputs, and server-sent events carry progress and results to Next.js. Evidence references must point to mapped entities. Review safeguards prevent rejected or unsuitable findings from appearing as a verified all-clear and replace empty/template-only action text with disclosed general guidance.
+
+The displayed evidence is model-generated explanatory output, not a verified account of internal reasoning. Confidence values are uncalibrated model estimates, not measured probabilities. The stage cache reuses results; it does not demonstrate transformer KV-cache acceleration.
+
+## Evaluation and limitations
+
+A six-case development evaluation compared a standard inspection with an added critic while sharing the upstream map and observations. **Five completed pairs agreed on the visible-concern category; one case failed.** Agreement does not establish correctness, and this small test did not demonstrate a category-level benefit from the critic. Additional review therefore remains opt-in.
+
+Read the [method and results](docs/evaluation/reliability/RESULTS.md), [case manifest](docs/evaluation/reliability/manifest.json), and [regression notes](docs/evaluation/reliability/REGRESSIONS.md). Evaluation scripts can make paid API calls and preserve earlier result files.
+
+Important limits:
+
+- Controlled PlantVillage leaf photos do not represent field deployment conditions.
+- A single photo cannot establish a disease cause, justify treatment, or establish whole-plant health.
+- Region boxes and observations can be wrong; broader field testing and agronomist review are outstanding.
+- Model latency and outputs vary. Functional demos are not performance or accuracy guarantees.
+- Public hosting and final competition eligibility remain unconfirmed. No public app deployment is claimed.
+
+A narrated demo with real product recordings was rendered separately. Large recordings, music and rendered video files are not stored in this source repository.
 
 ## Repository layout
 
-```
-VirgoEye/
-├── README.md                      # this file
-├── LICENSE                        # MIT
-├── CONTRIBUTING.md                # dev setup + PR guidelines
-├── SECURITY.md                    # how to report vulnerabilities
-├── CODE_OF_CONDUCT.md             # Contributor Covenant 2.1
-├── docker-compose.yml             # ollama + backend + frontend
-├── .env.example                   # configuration template
-├── .gitignore
-├── .github/
-│   ├── dependabot.yml             # weekly dep updates (actions, pip, npm)
-│   └── workflows/
-│       └── ci.yml                 # pytest + typecheck + build + E2E smoke
-│
-├── backend/                       # FastAPI service
-│   ├── main.py                    # SSE /v1/analyze, /v1/health
-│   ├── config.py                  # env-driven configuration
-│   ├── requirements.txt
-│   ├── Dockerfile
-│   ├── agents/                    # one class per CoVT stage
-│   │   ├── base_agent.py          # streaming + JSON extraction helpers
-│   │   ├── spatial_mapper.py      # STAGE 1 — semantic map
-│   │   ├── deliberator.py         # STAGE 2 — coVT thought chain
-│   │   ├── critic.py              # STAGE 3 — counter-factual verification
-│   │   └── synthesizer.py         # STAGE 4 — calibrated verdict
-│   ├── pipeline/
-│   │   ├── orchestrator.py        # chains stages, owns SSE framing
-│   │   ├── image_processor.py     # decode/normalize/resize once
-│   │   ├── kv_cache_manager.py    # (model, image, stage) result cache
-│   │   └── demo_engine.py         # image-aware zero-GPU fallback
-│   ├── ml_utils/
-│   │   ├── ollama_client.py       # Ollama /api/generate streamer
-│   │   ├── vllm_client.py         # OpenAI-compatible batch backend
-│   │   ├── quantization.py        # 4-bit AWQ helpers / VRAM sizing
-│   │   ├── gpu_monitor.py         # pynvml, CPU-safe fallback
-│   │   └── speed_tracker.py       # per-stage latency + tok/s
-│   ├── schema/                    # strict Pydantic contract types
-│   │   ├── diagnostic_map.py
-│   │   ├── thought_stream.py
-│   │   ├── verification.py
-│   │   ├── verdict.py
-│   │   ├── metrics.py
-│   │   └── api.py
-│   ├── prompts/
-│   │   ├── system_prompts.py      # master prompt + domain contexts
-│   │   ├── spatial_prompt.py
-│   │   ├── deliberation_prompt.py
-│   │   ├── critic_prompt.py
-│   │   └── synthesis_prompt.py
-│   └── tests/
-│       ├── test_schemas.py
-│       ├── test_pipeline.py
-│       ├── test_agents.py
-│       └── sample_images/         # pcb_fault, xray_sample, blueprint_sample
-│
-├── frontend/                      # Next.js 15 dashboard
-│   ├── app/
-│   │   ├── layout.tsx             # fonts, theme, shell
-│   │   ├── page.tsx               # single-page pipeline dashboard
-│   │   └── globals.css
-│   ├── lib/
-│   │   ├── types.ts               # TS mirror of backend schemas
-│   │   ├── constants.ts           # stage/severity/domain constants
-│   │   ├── api.ts                 # /api base + endpoint helpers
-│   │   ├── sse-parser.ts          # server-sent-event framing
-│   │   └── utils.ts
-│   ├── hooks/
-│   │   ├── useSSEStream.ts
-│   │   ├── useDiagnosticPipeline.ts
-│   │   ├── useBoundingBoxes.ts
-│   │   └── useGPUMetrics.ts
-│   ├── components/
-│   │   ├── layout/                # Header, SplitPane, Footer
-│   │   ├── diagnostic/            # ImageUploader, DiagnosticCanvas, bbox
-│   │   │                         #   overlay, EntityList, AnomalyHighlight
-│   │   ├── reasoning/             # ThoughtTerminal, CriticReport, VerdictCard,
-│   │   │                         #   ScanLineEffect, StageIndicator
-│   │   ├── metrics/               # MetricCards + 4 animated gauges
-│   │   ├── shared/                # GlassCard, PulsingDot, TypewriterText
-│   │   └── ui/                    # button, badge, card primitives
-│   ├── Dockerfile
-│   ├── next.config.js             # /api → backend rewrite
-│   └── package.json
-│
-├── models/
-│   ├── Modelfile                  # Ollama model definition
-│   └── README.md
-│
-├── scripts/
-│   ├── setup_ollama.sh            # one-command model bootstrap
-│   ├── benchmark.py               # end-to-end latency harness
-│   └── generate_test_data.py      # canonical PCB/X-ray/blueprint samples
-│
-└── docs/
-    ├── submission.md              # ML write-up (the "why")
-    ├── project-requirements.md    # hackathon deliverables + judging rubric + pre-deadline checklist
-    ├── nextstep-hacks-2026.md     # competition intel: theme, sponsors, past winners, game plan
-    ├── architecture.md            # diagrams + SSE contract
-    └── benchmarks.md              # speed numbers + how to reproduce
+```text
+backend/
+  agents/          Mapping, observations, critic and synthesis
+  pipeline/        Orchestration, cache and deterministic review policy
+  ml_utils/        Provider clients and metrics helpers
+  prompts/         Stage prompts
+  schema/          Request, evidence and result contracts
+  tests/           Automated backend tests
+frontend/
+  app/             Landing page and inspection workspace
+  components/      Image, evidence, progress and result UI
+  lib/             API contracts and standalone report export
+  public/samples/  Attributed sample images
+  tests/           Report export test
+scripts/evaluation/  Reproducible development evaluation tools
+docs/                Setup, deployment requirements and evaluation records
 ```
 
-## Tests & verification
+Stack: FastAPI, Pydantic, Python, Next.js 15, React 19, TypeScript and Tailwind. Ollama/vLLM adapters and Docker scaffolding remain available for experimentation; they are not the verified hosted Anthropic deployment path.
+
+## Tests
 
 ```bash
-cd backend && python -m pytest tests/ -q        # schemas + pipeline + agents
-cd frontend && npx tsc --noEmit                 # strict typecheck
-cd frontend && npm run build                    # production build
+# Repository root, with the virtual environment active
+python -m pytest -q
+
+# frontend/
+npm ci
+npm run test:report
+npm run typecheck
+npm run build
 ```
 
-CI (`.github/workflows/ci.yml`) runs all three plus an E2E smoke test that
-drives an analysis through the running frontend proxy.
+CI runs backend tests, report export checks, TypeScript checks, a production build and a simulation-mode API/proxy smoke test. Live provider quality is evaluated separately; CI requires no Anthropic key.
 
-## Contributing
+## Public deployment
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). TL;DR: tests must stay green,
-typecheck must pass, `frontend/lib/types.ts` must mirror backend schemas,
-and SSE frame types must match `docs/architecture.md`.
+Read [PUBLIC_DEMO.md](docs/PUBLIC_DEMO.md) before exposing the app. Public mode requires a server-side access code, persistent admission/budget storage, configured model prices and an approved budget. The application budget is a conservative estimate, not a guarantee about provider billing. Use a provider-side spending limit too.
 
-## Security
+The current public guard is designed for one backend process with persistent storage. Production use still needs HTTPS, operational monitoring and deployment verification. Keep credentials, usage ledgers and private images out of Git.
 
-Found a vulnerability? Report it privately — see [SECURITY.md](SECURITY.md).
-No public GitHub issues for security bugs.
+## Attribution and contributions
+
+Bundled sample images are credited to PlantVillage authors Sharada P. Mohanty, David P. Hughes and Marcel Salathé under CC BY-SA 3.0. The blurred sample is a labelled derivative. See [full sources and licensing](frontend/public/samples/ATTRIBUTION.md); dataset labels are not VirgoEye diagnoses.
+
+Codex assisted with implementation, evaluation, testing, documentation and demo preparation. The team remains responsible for reviewing findings, describing limitations and checking submission rules. Earlier planning documents are retained as historical context, not current product claims.
+
+[Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Code of conduct](CODE_OF_CONDUCT.md)
 
 ## License
 
-[MIT](LICENSE).
+Source code: [MIT](LICENSE). Sample images retain their separate attribution and share-alike terms.

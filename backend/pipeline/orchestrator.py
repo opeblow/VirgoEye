@@ -1,6 +1,7 @@
 """Master pipeline — chains the four CoVT stages and streams SSE events."""
 
 import asyncio
+import json
 import time
 from typing import Any, AsyncGenerator, Dict, Optional
 
@@ -14,6 +15,7 @@ from backend.ml_utils.ollama_client import OllamaClient
 from backend.ml_utils.quantization import normalize_quant
 from backend.ml_utils.speed_tracker import SpeedTracker
 from backend.ml_utils.vllm_client import VLLMClient
+from backend.ml_utils.anthropic_client import AnthropicVisionClient
 from backend.pipeline.image_processor import (
     ImageValidationError,
     brightness_stats,
@@ -35,9 +37,10 @@ class PipelineOrchestrator:
         tracker: Optional[SpeedTracker] = None,
     ) -> None:
         self.ollama = ollama or OllamaClient()
-        self.vllm = vllm or (VLLMClient() if config.VLLM_ENABLED else None)
+        self.vllm = vllm or (AnthropicVisionClient() if config.ANTHROPIC_API_KEY else (VLLMClient() if config.VLLM_ENABLED else None))
         self.gpu = gpu or GPUMonitor()
         self.tracker = tracker or SpeedTracker()
+        self._analysis_lock = asyncio.Lock()
         self.cache = KVCacheManager(
             enabled=config.ENABLE_KV_CACHE, max_stages=config.KV_CACHE_MAX_STAGES
         )
@@ -53,6 +56,12 @@ class PipelineOrchestrator:
             self._demo_mode = True
             self._model_name = "DEMO-SYSTEM"
             self._quantization = "n/a"
+            self._ollama_ok = False
+            return
+        if isinstance(self.vllm, AnthropicVisionClient):
+            self._model_name = self.vllm.model
+            self._quantization = "hosted"
+            self._demo_mode = False
             self._ollama_ok = False
             return
         if self.vllm is not None:
@@ -100,7 +109,13 @@ class PipelineOrchestrator:
             **kw,
         )
 
-    async def analyze(
+    async def analyze(self, req: AnalyzeRequest):
+        # Keep mutable stage accounting isolated while the local workspace runs.
+        async with self._analysis_lock:
+            async for event in self._analyze_locked(req):
+                yield event
+
+    async def _analyze_locked(
         self, req: AnalyzeRequest
     ) -> AsyncGenerator[Dict[str, Any], None]:
         """Yield SSE-friendly event dicts. Raises on unrecoverable input errors."""
@@ -114,6 +129,7 @@ class PipelineOrchestrator:
         self.tracker = SpeedTracker()
 
         ctx = PipelineContext(
+            extra_review=req.extra_review,
             image=processed,
             model_name=self._model_name,
             domain=req.domain,
@@ -154,11 +170,17 @@ class PipelineOrchestrator:
             self.agent(Synthesizer),
         ]
         for agent in agents:
+            if agent.stage_name == "critic" and not ctx.extra_review:
+                ctx.critique_json = json.dumps({"review_performed": False,
+                    "critic_notes": "No additional automated review was requested. Do not claim verification."})
+                yield {"type": "review_skipped", "stage": "critic"}
+                continue
             self.tracker.begin_stage(agent.stage_name)
             cache_key = ctx.stage_prompt_variant(agent.stage_name)
             cached = self.cache.get(cache_key)
             failed = False
             if cached is not None:
+                ctx.metrics.setdefault("cached_stages", []).append(agent.stage_name)
                 ctx.restore(agent.stage_name, cached)
                 yield cached
             else:
@@ -184,6 +206,7 @@ class PipelineOrchestrator:
     ) -> AsyncGenerator[Dict[str, Any], None]:
         gpu = self.gpu.snapshot()
         metrics = PerformanceMetrics(
+            cached_stages=ctx.metrics.get("cached_stages", []),
             **self.tracker.metrics(
                 gpu,
                 model_name=self._model_name,

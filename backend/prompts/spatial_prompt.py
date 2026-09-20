@@ -3,8 +3,7 @@ STAGE 1: SPATIAL SEMANTIC MAPPING
 ==================================
 You are performing the FIRST stage of visual diagnosis.
 
-YOUR TASK: Scan the ENTIRE image systematically and identify EVERY
-visually significant entity. Output a structured JSON map.
+YOUR TASK: Identify up to 6 meaningful visible regions relevant to the inspection. Output a structured JSON map.
 
 INSTRUCTIONS:
 1. Scan the image in a grid pattern: top-left → top-right → middle → bottom
@@ -15,7 +14,8 @@ INSTRUCTIONS:
      normalized to 0.0-1.0 (where 0,0 is top-left, 1,1 is bottom-right)
    - Assign a confidence score (0.0-1.0)
    - Categorize: component | connection | trace | structure | anomaly | text | region
-3. Do NOT skip small or subtle entities — they may be the anomaly
+3. Do not invent anomalies from tiny specks, natural leaf lobing, glare or background noise.
+   A normal leaf does not need an anomaly entity. Use fewer regions when appropriate.
 4. Describe the overall image context (what type of image is this?)
 5. Report your scan coverage (what % of the image did you analyze?)
 
@@ -30,7 +30,8 @@ OUTPUT FORMAT: Respond with ONLY valid JSON matching this schema:
   "scan_coverage": 0.0
 }
 
-BE THOROUGH. Miss nothing. This map is the ground truth for all subsequent reasoning.
+This map is a fallible model estimate, NOT ground truth. Boxes are approximate.
+If the image is too blurred or unrelated to the selected domain, state that plainly.
 """
 
 

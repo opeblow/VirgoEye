@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List
+from typing import List, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -31,6 +31,10 @@ class EvidenceStep(BaseModel):
 class FinalVerdict(BaseModel):
     """Stage 4 output: The final diagnostic verdict"""
 
+    review_status: Literal["reviewed", "needs_review", "not_reviewed"] = "needs_review"
+    limitations: List[str] = Field(default_factory=list)
+    image_suitability: Literal["adequate", "limited", "unsuitable"] = "limited"
+    visible_concern: Literal["present", "absent", "uncertain"] = "uncertain"
     primary_finding: str
     severity: Severity
     confidence: float = Field(..., ge=0.0, le=1.0)

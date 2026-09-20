@@ -9,6 +9,8 @@ from backend import config
 class AnalyzeRequest(BaseModel):
     """Request body for /v1/analyze"""
 
+    extra_review: bool = True
+
     image_base64: str = Field(
         ...,
         min_length=16,

@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 class PerformanceMetrics(BaseModel):
     """Real-time performance metrics for the SPEED challenge"""
 
+    cached_stages: list[str] = Field(default_factory=list)
     total_latency_ms: float
     stage_latencies: Dict[str, float] = Field(
         ..., description="Per-stage latency in ms"

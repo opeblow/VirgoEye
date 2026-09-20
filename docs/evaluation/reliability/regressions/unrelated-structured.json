@@ -1,0 +1,214 @@
+{
+  "prompt_version": "2.2.1",
+  "model": "claude-sonnet-5",
+  "seconds": 37.67,
+  "events": [
+    {
+      "type": "info",
+      "stage": "system",
+      "data": {
+        "image_resolution": "512x512 -> 512x512",
+        "domain": "agriculture",
+        "model": "claude-sonnet-5",
+        "quantization": "hosted",
+        "demo_mode": false,
+        "ollama_ok": false
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "mapping",
+      "data": {
+        "entities": [
+          {
+            "id": "E1",
+            "label": "Schematic-style rectangular outline shapes on dark background",
+            "bbox": {
+              "xmin": 0.1,
+              "ymin": 0.19,
+              "xmax": 0.24,
+              "ymax": 0.25
+            },
+            "confidence": 0.4,
+            "category": "structure",
+            "description": "Thin-lined rectangle with inner border, resembling a diagram symbol rather than natural plant or field texture."
+          },
+          {
+            "id": "E2",
+            "label": "Rectangular outline cluster (upper right)",
+            "bbox": {
+              "xmin": 0.68,
+              "ymin": 0.37,
+              "xmax": 0.81,
+              "ymax": 0.44
+            },
+            "confidence": 0.4,
+            "category": "structure",
+            "description": "Another line-drawn rectangle with internal segmentation, consistent with a technical/electronic diagram element."
+          },
+          {
+            "id": "E3",
+            "label": "Rectangular outline shape (center)",
+            "bbox": {
+              "xmin": 0.43,
+              "ymin": 0.44,
+              "xmax": 0.55,
+              "ymax": 0.5
+            },
+            "confidence": 0.4,
+            "category": "structure",
+            "description": "Line-drawn rectangle similar to circuit or block-diagram symbol, not indicative of plant canopy or soil."
+          },
+          {
+            "id": "E4",
+            "label": "Compound rectangular element with connecting line (lower right)",
+            "bbox": {
+              "xmin": 0.61,
+              "ymin": 0.73,
+              "xmax": 0.86,
+              "ymax": 0.79
+            },
+            "confidence": 0.45,
+            "category": "structure",
+            "description": "Two joined rectangles with an extending line, resembling a schematic component/connector rather than an agricultural feature."
+          },
+          {
+            "id": "E5",
+            "label": "Scattered thin line segments and small circles across image",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.0,
+              "xmax": 1.0,
+              "ymax": 1.0
+            },
+            "confidence": 0.35,
+            "category": "trace",
+            "description": "Multiple short line segments and small open circles distributed across the frame, consistent with schematic wiring/nodes rather than crop rows, canopy texture, or irrigation patterns."
+          },
+          {
+            "id": "E6",
+            "label": "Uniform dark green background",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.0,
+              "xmax": 1.0,
+              "ymax": 1.0
+            },
+            "confidence": 0.3,
+            "category": "region",
+            "description": "Flat, uniform dark background lacking soil texture, canopy variation, or field depth cues expected in an agricultural photograph."
+          }
+        ],
+        "total_entities": 6,
+        "image_context": "This image appears to be a technical/schematic line drawing (resembling a circuit diagram or abstract icon layout) on a solid dark green background, not a photograph of a field, orchard, or crop canopy. No plant tissue, soil, or irrigation infrastructure is visibly present.",
+        "scan_coverage": 0.95
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "deliberation",
+      "data": {
+        "thought_chain": "**Visible observations:**\nThe image is a schematic-style line drawing on a uniform dark green background, not a photograph of a field, crop, or plant material. Entities E1, E2, E3, and E4 are thin-lined rectangular outlines (some with internal segmentation) that resemble circuit or block-diagram symbols. E5 notes scattered short line segments and small open circles distributed throughout the frame, consistent with schematic wiring, nodes, or connectors. E6 confirms the background is flat and uniform, lacking any soil texture, canopy variation, leaf structure, or depth cues typically seen in agricultural imagery.\n\n**Uncertainty and alternative explanations:**\nThis image does not contain any observable plant tissue, soil, irrigation infrastructure, or field topography. The shapes and lines are geometric and abstract, more consistent with a technical diagram, icon layout, or illustrative graphic than a real-world agricultural photograph. There is no visual evidence supporting inference of crop health, disease, pest damage, nutrient status, or yield in this image. Any attempt to map these schematic elements to biological or environmental conditions would be speculative and unsupported by the image content.\n\n**Suggested field checks:**\nThis image is inadequate for agricultural or environmental inspection purposes. To conduct a valid inspection, a genuine photograph of the crop, field, or site in question is required\u2014ideally with visible plant canopy, soil, and relevant infrastructure under adequate lighting. If this schematic was submitted in error, please provide the correct field image. If the diagram itself is the subject of inquiry (e.g., an irrigation or sensor layout), please clarify the intended context so it can be reviewed accordingly.\n\n**Conclusion:** Inspection is inconclusive; this is an illustrative/schematic graphic, not suitable for crop or environmental assessment.",
+        "total_tokens_approx": 271
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "critic",
+      "data": {
+        "verified": true,
+        "hallucination_count": 0,
+        "hallucinations": [],
+        "missed_entities": [],
+        "corrections": [],
+        "critic_confidence": 0.9,
+        "critic_notes": "Stage 2 accurately reflects Stage 1 entities and bounding regions without adding unsupported coordinates or claims. All six entities (E1-E6) are addressed, either individually or as part of the collective schematic description. The conclusion that this is a non-agricultural schematic image, unsuitable for crop/environmental inspection, is well-supported by the described geometric shapes, uniform background, and absence of biological or soil texture. No hasty generalizations or false anomaly claims are present. Confidence level is appropriately cautious and matches the low-confidence scores (0.3-0.45) in Stage 1.\u300b"
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "synthesis",
+      "data": {
+        "review_status": "needs_review",
+        "limitations": [
+          "Visual inspection support; not a confirmed diagnosis.",
+          "Image regions are approximate. Confidence is not a measured probability.",
+          "The image does not support a definite visible-concern assessment."
+        ],
+        "image_suitability": "limited",
+        "visible_concern": "uncertain",
+        "primary_finding": "Image is a schematic/technical line drawing on a uniform dark background, not a photograph of crop, soil, or field infrastructure; no agricultural content is present to assess.",
+        "severity": "WARNING",
+        "confidence": 0.85,
+        "affected_entities": [],
+        "evidence_chain": [
+          {
+            "step_number": 1,
+            "description": "Spatial mapping identified only thin-lined rectangular outlines with internal segmentation, scattered line segments, and small open circles distributed across the frame.",
+            "supporting_entity_ids": [
+              "E1",
+              "E2",
+              "E3",
+              "E4",
+              "E5"
+            ]
+          },
+          {
+            "step_number": 2,
+            "description": "Background is uniformly flat dark green with no soil texture, canopy variation, leaf structure, or depth cues expected in field imagery.",
+            "supporting_entity_ids": [
+              "E6"
+            ]
+          },
+          {
+            "step_number": 3,
+            "description": "Reasoning stage concluded the shapes are consistent with a circuit/block diagram or icon layout, not plant tissue, soil, or irrigation infrastructure.",
+            "supporting_entity_ids": [
+              "E1",
+              "E2",
+              "E3",
+              "E4",
+              "E5",
+              "E6"
+            ]
+          },
+          {
+            "step_number": 4,
+            "description": "Critic verified all entities were accurately described with no hallucinations or missed items, supporting the conclusion that this is a non-agricultural schematic.",
+            "supporting_entity_ids": [
+              "E1",
+              "E2",
+              "E3",
+              "E4",
+              "E5",
+              "E6"
+            ]
+          }
+        ],
+        "recommended_action": "Discard this image for agricultural inspection purposes. Obtain a clear, well-lit photograph of the actual crop canopy, leaves, or soil in question, taken at appropriate distance to capture relevant detail, and resubmit for assessment.",
+        "summary": "Inspection inconclusive: submitted image is a schematic/diagram, not a crop or field photograph. No plant tissue, soil, or infrastructure visible. Recommend providing an actual field photo for valid agricultural assessment.','affected_entities':[]}"
+      }
+    },
+    {
+      "type": "metrics",
+      "stage": "metrics",
+      "data": {
+        "total_latency_ms": 37652.6,
+        "stage_latencies": {
+          "mapping": 12115.1,
+          "deliberation": 7714.5,
+          "critic": 6485.5,
+          "synthesis": 11337.5
+        },
+        "tokens_per_second": 79.7,
+        "total_tokens_generated": 2422,
+        "vram_usage_mb": 0.0,
+        "vram_total_mb": 0.0,
+        "gpu_utilization_percent": 0.0,
+        "model_name": "claude-sonnet-5",
+        "quantization": "hosted",
+        "image_resolution": "512x512 -> 512x512"
+      }
+    }
+  ]
+}

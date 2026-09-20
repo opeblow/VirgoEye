@@ -1,0 +1,319 @@
+{
+  "case": {
+    "id": "absent-1",
+    "path": "/tmp/virgoeye-reliability/absent-1.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___healthy/000146ff-92a4-4db6-90ad-8fce2ae4fddd___GH_HL%20Leaf%20259.1.JPG",
+    "expected": "absent",
+    "sha256": "a294299b0518a50ebc275c0ec4519b022cab8b34735039f6c2a089a911f6964e",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  "prompt_version": "2.2.0",
+  "model": "claude-sonnet-5",
+  "full_seconds": 32.39,
+  "full_events": [
+    {
+      "type": "info",
+      "stage": "system",
+      "data": {
+        "image_resolution": "256x256 -> 256x256",
+        "domain": "agriculture",
+        "model": "claude-sonnet-5",
+        "quantization": "hosted",
+        "demo_mode": false,
+        "ollama_ok": false
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "mapping",
+      "data": {
+        "entities": [
+          {
+            "id": "E1",
+            "label": "Single leaf, whole specimen",
+            "bbox": {
+              "xmin": 0.09,
+              "ymin": 0.06,
+              "xmax": 0.93,
+              "ymax": 0.92
+            },
+            "confidence": 0.95,
+            "category": "component",
+            "description": "Broad, roughly heart/ovate shaped leaf with shallow lobing along the left margin, centered against a plain gray background."
+          },
+          {
+            "id": "E2",
+            "label": "Midrib vein",
+            "bbox": {
+              "xmin": 0.45,
+              "ymin": 0.1,
+              "xmax": 0.55,
+              "ymax": 0.88
+            },
+            "confidence": 0.9,
+            "category": "structure",
+            "description": "Central pale vein running from the leaf apex to the base, with faint lateral veins branching outward."
+          },
+          {
+            "id": "E3",
+            "label": "Leaf margin lobes (left side)",
+            "bbox": {
+              "xmin": 0.09,
+              "ymin": 0.35,
+              "xmax": 0.28,
+              "ymax": 0.65
+            },
+            "confidence": 0.75,
+            "category": "structure",
+            "description": "Shallow undulating notches along the left edge, consistent with natural leaf shape variation rather than damage."
+          },
+          {
+            "id": "E4",
+            "label": "Faint surface discoloration streaks",
+            "bbox": {
+              "xmin": 0.25,
+              "ymin": 0.45,
+              "xmax": 0.4,
+              "ymax": 0.6
+            },
+            "confidence": 0.35,
+            "category": "anomaly",
+            "description": "Subtle darker faint streak-like marks on the leaf surface; could be shadow, minor bruising, or vein shadowing rather than a definitive lesion."
+          },
+          {
+            "id": "E5",
+            "label": "Uniform gray background/backdrop",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.0,
+              "xmax": 1.0,
+              "ymax": 1.0
+            },
+            "confidence": 0.9,
+            "category": "region",
+            "description": "Speckled neutral gray surface used as a plain backdrop, likely a countertop or imaging mat, not part of the plant."
+          },
+          {
+            "id": "E6",
+            "label": "Leaf apex tip",
+            "bbox": {
+              "xmin": 0.42,
+              "ymin": 0.04,
+              "xmax": 0.58,
+              "ymax": 0.14
+            },
+            "confidence": 0.7,
+            "category": "structure",
+            "description": "Pointed tip at the top of the leaf, typical of this leaf morphology."
+          }
+        ],
+        "total_entities": 6,
+        "image_context": "A single detached plant leaf photographed against a plain gray speckled background, likely for close-up inspection or reference documentation rather than a field or canopy scene.",
+        "scan_coverage": 0.95
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "deliberation",
+      "data": {
+        "thought_chain": "**Visible observations:**\nA single detached leaf (E1) is shown against a plain gray speckled backdrop (E5), likely photographed for reference rather than in a field/canopy context. The leaf has a broad ovate shape with a pointed apex (E6) and shallow undulating lobes along the left margin (E3), which appear consistent with normal leaf morphology rather than damage. A central midrib with faint lateral veins is visible (E2). A subtle, low-confidence area of faint discoloration/streaking is noted near the leaf's mid-left surface (E4), but this is not clearly defined and could represent shadow, vein shadowing, minor bruising, or an imaging artifact.\n\n**Uncertainty and alternative explanations:**\nThis image shows only one isolated leaf against a neutral background with no plant context, scale reference, or field setting, limiting the inspection's diagnostic value. The faint marking at E4 has low confidence (0.35) and cannot be distinguished as a lesion, pest damage, nutrient issue, or simply a shadow/reflection artifact from a single static image. No definitive signs of disease, pest activity, or nutrient deficiency are confirmed. Lighting, camera angle, and lack of leaf underside view further limit conclusions. This is not an illustration, but it is an inadequate basis for full field-level or health status conclusions.\n\n**Suggested field checks:**\n- Physically inspect the leaf and surrounding plants in situ, including the underside, for texture, lesions, insects, or exudate.\n- Examine multiple leaves across the plant/field to assess whether the faint marking (E4) is isolated or widespread.\n- Document with side lighting and macro focus to clarify whether the discoloration is a surface feature or vein shadow.\n- Cross-reference with recent weather, irrigation, and pest scouting records before drawing further conclusions.",
+        "total_tokens_approx": 275
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "critic",
+      "data": {
+        "verified": true,
+        "hallucination_count": 0,
+        "hallucinations": [],
+        "missed_entities": [],
+        "corrections": [
+          {
+            "original_claim": "E4 could represent shadow, vein shadowing, minor bruising, or an imaging artifact",
+            "issue": "Reasonable hedge, but slightly over-lists plausible causes without noting low confidence (0.35) more strongly as likely non-issue",
+            "corrected_claim": "E4 is a low-confidence, faint surface variation most consistent with shadow or natural surface texture; insufficient evidence to suggest bruising or pathology",
+            "referenced_entity_id": null
+          },
+          {
+            "original_claim": "E3 lobes consistent with normal leaf morphology",
+            "issue": "Correctly identified as normal, not a flaw, but worth reinforcing this is not evidence of pest feeding",
+            "corrected_claim": "E3 shallow marginal undulations are typical leaf shape variation, not indicative of insect or mechanical damage",
+            "referenced_entity_id": null
+          }
+        ],
+        "critic_confidence": 0.85,
+        "critic_notes": "All six Stage 1 entities were addressed in the narrative, including background (E5) appropriately excluded as non-plant. No spatial mismatches found; coordinates align with visible leaf features. Reasoning appropriately avoids overclaiming disease from a single faint low-confidence mark and correctly flags lack of context as a limitation. No missed anomalies observed beyond what was noted. Confidence calibration is appropriate given single-image, no-scale, no-context constraints."
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "synthesis",
+      "data": {
+        "review_status": "needs_review",
+        "limitations": [
+          "Visual inspection support; not a confirmed diagnosis.",
+          "Image regions are approximate. Confidence is not a measured probability.",
+          "The image does not support a definite visible-concern assessment."
+        ],
+        "image_suitability": "limited",
+        "visible_concern": "uncertain",
+        "primary_finding": "Single detached leaf on plain background shows normal ovate shape and typical marginal lobing; one low-confidence faint surface mark noted but not distinguishable from shadow or texture.",
+        "severity": "WARNING",
+        "confidence": 0.55,
+        "affected_entities": [
+          {
+            "entity_id": "E1",
+            "role": "primary",
+            "bbox": {
+              "xmin": 0.09,
+              "ymin": 0.06,
+              "xmax": 0.93,
+              "ymax": 0.92
+            }
+          },
+          {
+            "entity_id": "E4",
+            "role": "secondary",
+            "bbox": {
+              "xmin": 0.25,
+              "ymin": 0.45,
+              "xmax": 0.4,
+              "ymax": 0.6
+            }
+          },
+          {
+            "entity_id": "E3",
+            "role": "context",
+            "bbox": {
+              "xmin": 0.09,
+              "ymin": 0.35,
+              "xmax": 0.28,
+              "ymax": 0.65
+            }
+          }
+        ],
+        "evidence_chain": [
+          {
+            "step_number": 1,
+            "description": "Isolated leaf photographed against neutral gray backdrop, no plant/field context or scale reference.",
+            "supporting_entity_ids": [
+              "E1",
+              "E5"
+            ]
+          },
+          {
+            "step_number": 2,
+            "description": "Leaf shape, midrib, and marginal lobing are consistent with typical morphology, not damage.",
+            "supporting_entity_ids": [
+              "E2",
+              "E3",
+              "E6"
+            ]
+          },
+          {
+            "step_number": 3,
+            "description": "A faint low-confidence surface mark was flagged but corrected by critic to most likely reflect shadow or texture rather than pathology.",
+            "supporting_entity_ids": [
+              "E4"
+            ]
+          },
+          {
+            "step_number": 4,
+            "description": "No hallucinations or missed entities found in critic review; confidence calibration reflects single-image, no-context limitations.",
+            "supporting_entity_ids": []
+          }
+        ],
+        "recommended_action": "Inspect the source plant directly, including leaf undersides and multiple leaves, under natural side lighting; check for texture, insects, or lesions before drawing conclusions. This image alone cannot establish a diagnosis.",
+        "summary": "Single leaf image shows normal shape and venation with one ambiguous faint mark; insufficient context to confirm any disease or damage\u2014recommend direct field inspection."
+      }
+    },
+    {
+      "type": "metrics",
+      "stage": "metrics",
+      "data": {
+        "total_latency_ms": 32378.9,
+        "stage_latencies": {
+          "mapping": 10065.0,
+          "deliberation": 8024.3,
+          "critic": 6553.1,
+          "synthesis": 7736.5
+        },
+        "tokens_per_second": 76.9,
+        "total_tokens_generated": 2790,
+        "vram_usage_mb": 0.0,
+        "vram_total_mb": 0.0,
+        "gpu_utilization_percent": 0.0,
+        "model_name": "claude-sonnet-5",
+        "quantization": "hosted",
+        "image_resolution": "256x256 -> 256x256"
+      }
+    }
+  ],
+  "no_critic": {
+    "review_status": "needs_review",
+    "limitations": [],
+    "image_suitability": "limited",
+    "visible_concern": "uncertain",
+    "primary_finding": "Single detached leaf on plain background shows normal ovate shape and shallow marginal lobing; a low-confidence faint surface streak (E4) is not clearly a lesion and may be shadow or artifact.",
+    "severity": "NOMINAL",
+    "confidence": 0.45,
+    "affected_entities": [
+      {
+        "entity_id": "E1",
+        "role": "primary",
+        "bbox": {
+          "xmin": 0.09,
+          "ymin": 0.06,
+          "xmax": 0.93,
+          "ymax": 0.92
+        }
+      },
+      {
+        "entity_id": "E4",
+        "role": "secondary",
+        "bbox": {
+          "xmin": 0.25,
+          "ymin": 0.45,
+          "xmax": 0.4,
+          "ymax": 0.6
+        }
+      }
+    ],
+    "evidence_chain": [
+      {
+        "step_number": 1,
+        "description": "Single isolated leaf photographed against neutral gray backdrop, no field/plant context.",
+        "supporting_entity_ids": [
+          "E1",
+          "E5"
+        ]
+      },
+      {
+        "step_number": 2,
+        "description": "Leaf shape, apex, midrib, and marginal lobing appear consistent with normal morphology, not damage.",
+        "supporting_entity_ids": [
+          "E2",
+          "E3",
+          "E6"
+        ]
+      },
+      {
+        "step_number": 3,
+        "description": "A faint discoloration/streak is noted but has low confidence (0.35) and cannot be distinguished from shadow, vein shadowing, or artifact.",
+        "supporting_entity_ids": [
+          "E4"
+        ]
+      },
+      {
+        "step_number": 4,
+        "description": "No critic verification was performed in this run; findings rest solely on Stage 1-2 outputs.",
+        "supporting_entity_ids": []
+      }
+    ],
+    "recommended_action": "Obtain additional photos of this leaf and others on the same plant, including undersides, under consistent lighting; inspect in situ for lesions, pests, or exudate before drawing conclusions.",
+    "summary": "Isolated leaf photo shows normal shape; a faint low-confidence surface mark is inconclusive. No clear disease evidence; further field inspection recommended."
+  },
+  "no_critic_synthesis_seconds": 8.65,
+  "no_critic_output_tokens": 723
+}

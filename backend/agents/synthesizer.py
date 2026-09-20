@@ -4,7 +4,8 @@ from typing import Any, AsyncGenerator, Dict
 
 from backend.agents.base_agent import BaseAgent, extract_json_block, parse_json
 from backend.prompts.synthesis_prompt import build_synthesis_prompt
-from backend.schema.verdict import FinalVerdict
+from backend.schema.verdict import FinalVerdict, Severity
+from backend.pipeline.review_policy import apply_review_policy
 
 
 class Synthesizer(BaseAgent):
@@ -35,11 +36,19 @@ class Synthesizer(BaseAgent):
             return
 
         try:
-            verdict = FinalVerdict.model_validate(
-                parse_json(extract_json_block(text))
-            )
+            payload = parse_json(extract_json_block(text))
+            # Summary is display-only; keep the full finding and evidence intact.
+            if isinstance(payload.get("summary"), str) and len(payload["summary"]) > 500:
+                payload["summary"] = payload["summary"][:497] + "..."
+            verdict = FinalVerdict.model_validate(payload)
         except Exception as exc:  # noqa: BLE001
             yield self._error(f"Stage 4 schema validation failed: {exc}")
+            return
+
+        try:
+            verdict = apply_review_policy(verdict, ctx.map_json, ctx.critique_json)
+        except ValueError as exc:
+            yield self._error(str(exc))
             return
 
         yield {

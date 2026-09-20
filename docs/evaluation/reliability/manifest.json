@@ -1,0 +1,48 @@
+[
+  {
+    "id": "absent-1",
+    "path": "/tmp/virgoeye-reliability/absent-1.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___healthy/000146ff-92a4-4db6-90ad-8fce2ae4fddd___GH_HL%20Leaf%20259.1.JPG",
+    "expected": "absent",
+    "sha256": "a294299b0518a50ebc275c0ec4519b022cab8b34735039f6c2a089a911f6964e",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  {
+    "id": "absent-2",
+    "path": "/tmp/virgoeye-reliability/absent-2.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___healthy/000bf685-b305-408b-91f4-37030f8e62db___GH_HL%20Leaf%20308.1.JPG",
+    "expected": "absent",
+    "sha256": "a0d4ca4c979a0ca63ebb20a66bbd1cd46a43138d849b53bce1921694ab91938b",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  {
+    "id": "present-1",
+    "path": "/tmp/virgoeye-reliability/present-1.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___Early_blight/0012b9d2-2130-4a06-a834-b1f3af34f57e___RS_Erly.B%208389.JPG",
+    "expected": "present",
+    "sha256": "29b79036b67724f6a76895d17ef1b863ad7a7134e03141b1feb601a591336123",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  {
+    "id": "present-2",
+    "path": "/tmp/virgoeye-reliability/present-2.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___Early_blight/0034a551-9512-44e5-ba6c-827f85ecc688___RS_Erly.B%209432.JPG",
+    "expected": "present",
+    "sha256": "ec1e81f52511918a2f14ac0ef020a850b745230de9ef74485d505133af963525",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  {
+    "id": "blurred",
+    "path": "/tmp/virgoeye-reliability/blurred.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___healthy/000146ff-92a4-4db6-90ad-8fce2ae4fddd___GH_HL%20Leaf%20259.1.JPG",
+    "expected": "uncertain",
+    "expectation_basis": "Deliberately degraded to 6x6 and blurred; should not assert leaf condition"
+  },
+  {
+    "id": "unrelated",
+    "path": "backend/tests/sample_images/pcb_fault.png",
+    "source": "Repository-generated PCB illustration",
+    "expected": "uncertain",
+    "expectation_basis": "Non-crop input to agriculture inspection"
+  }
+]

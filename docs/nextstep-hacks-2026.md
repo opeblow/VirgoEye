@@ -1,3 +1,5 @@
+> Historical planning/reference document. For current behavior, setup and evidence, use the [README](../README.md) and [evaluation results](evaluation/reliability/RESULTS.md). Earlier targets and claims below are not validated product results.
+
 # NextStep Hacks 2026 — Competition Intel & Game Plan
 
 Compiled from the official Devpost page, rules, dates, sponsors page, and past

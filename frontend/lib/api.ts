@@ -1,6 +1,5 @@
 // In dev, `/api` is rewritten by next.config.js to the local backend.
-// In Docker, set NEXT_PUBLIC_API_BASE to hit the backend container directly
-// (relative proxy across containers is not possible).
+// BACKEND_URL selects the private backend at build time, including in Docker.
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE?.replace(/\/$/, "") ?? "/api";
 

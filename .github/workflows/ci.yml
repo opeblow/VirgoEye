@@ -56,6 +56,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Report export test
+        run: npm run test:report
+
       - name: Typecheck
         run: npm run typecheck
 

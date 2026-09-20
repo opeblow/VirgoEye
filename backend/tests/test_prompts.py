@@ -38,7 +38,8 @@ def test_synthesis_prompt_keeps_literal_json_example():
 def test_deliberation_prompt_renders():
     p = build_deliberation_prompt('{"entities": ["E1"]}')
     assert '{"entities": ["E1"]}' in p
-    assert "<thought>" in p
+    assert "Visible observations" in p
+    assert "Uncertainty" in p
 
 
 def test_spatial_prompt_renders_with_domain():

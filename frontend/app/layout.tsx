@@ -2,9 +2,9 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Virgo-Eye — Chain-of-Visual-Thought Diagnostic Engine",
+  title: "VirgoEye — Crop Inspection",
   description:
-    "Reasoning-first multimodal diagnostics. Spatial mapping → CoVT deliberation → critic verification → calibrated verdict.",
+    "Evidence-led crop inspection. Review visible concerns, uncertainty, and practical field checks.",
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },

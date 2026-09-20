@@ -1,0 +1,278 @@
+{
+  "case": {
+    "id": "absent-2",
+    "path": "/tmp/virgoeye-reliability/absent-2.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___healthy/000bf685-b305-408b-91f4-37030f8e62db___GH_HL%20Leaf%20308.1.JPG",
+    "expected": "absent",
+    "sha256": "a0d4ca4c979a0ca63ebb20a66bbd1cd46a43138d849b53bce1921694ab91938b",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  "prompt_version": "2.2.0",
+  "model": "claude-sonnet-5",
+  "full_seconds": 31.51,
+  "full_events": [
+    {
+      "type": "info",
+      "stage": "system",
+      "data": {
+        "image_resolution": "256x256 -> 256x256",
+        "domain": "agriculture",
+        "model": "claude-sonnet-5",
+        "quantization": "hosted",
+        "demo_mode": false,
+        "ollama_ok": false
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "mapping",
+      "data": {
+        "entities": [
+          {
+            "id": "E1",
+            "label": "Single leaf, whole",
+            "bbox": {
+              "xmin": 0.24,
+              "ymin": 0.07,
+              "xmax": 0.78,
+              "ymax": 0.9
+            },
+            "confidence": 0.95,
+            "category": "structure",
+            "description": "Single serrated/lobed leaf centered against a plain dark gray background, photographed in isolation rather than in canopy context."
+          },
+          {
+            "id": "E2",
+            "label": "Leaf lobes/margin serrations",
+            "bbox": {
+              "xmin": 0.25,
+              "ymin": 0.1,
+              "xmax": 0.77,
+              "ymax": 0.75
+            },
+            "confidence": 0.85,
+            "category": "structure",
+            "description": "Irregular pointed lobes along the leaf margin; appears to be natural leaf morphology rather than damage."
+          },
+          {
+            "id": "E3",
+            "label": "Central midrib and venation",
+            "bbox": {
+              "xmin": 0.42,
+              "ymin": 0.15,
+              "xmax": 0.58,
+              "ymax": 0.85
+            },
+            "confidence": 0.8,
+            "category": "trace",
+            "description": "Visible lighter-toned midrib running vertically with faint lateral veins branching to each lobe."
+          },
+          {
+            "id": "E4",
+            "label": "Petiole (leaf stalk)",
+            "bbox": {
+              "xmin": 0.46,
+              "ymin": 0.83,
+              "xmax": 0.55,
+              "ymax": 0.95
+            },
+            "confidence": 0.75,
+            "category": "component",
+            "description": "Short pale stalk at the base of the leaf, partially visible against the background."
+          },
+          {
+            "id": "E5",
+            "label": "Uniform gray background surface",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.0,
+              "xmax": 1.0,
+              "ymax": 1.0
+            },
+            "confidence": 0.7,
+            "category": "region",
+            "description": "Textured dark gray backdrop, likely a table or mat used for isolated specimen photography; not a field or canopy scene."
+          }
+        ],
+        "total_entities": 5,
+        "image_context": "A single detached leaf photographed against a plain textured gray background, consistent with a specimen/reference photo rather than an in-field canopy or planting-row image. No soil, irrigation, or multi-plant context is visible.",
+        "scan_coverage": 0.95
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "deliberation",
+      "data": {
+        "thought_chain": "**Visible observations**\nThe image shows a single detached leaf (E1) with a lobed/serrated margin (E2), a visible midrib and lateral venation (E3), and a short petiole (E4), photographed against a uniform gray textured background (E5). The leaf appears intact overall, with no obvious lesions, discoloration patterns, holes, or insect damage clearly visible at this resolution. The lobing pattern appears consistent with natural leaf morphology rather than feeding damage, but this cannot be confirmed from a single isolated image.\n\n**Uncertainty and alternative explanations**\nThis is a specimen-style reference photo, not an in-field or canopy image \u2014 no soil, stem, adjacent leaves, or planting context is present, which limits diagnostic value. Species identity cannot be confirmed. Apparent lobing could be normal leaf shape, varietal characteristic, or early-stage margin damage from chewing insects, wind abrasion, or mechanical handling \u2014 appearance alone cannot distinguish these. Lighting, camera angle, and lack of scale reference further limit assessment. No signs of nutrient deficiency, disease lesions, or pest presence are confirmed; absence of visible symptoms does not indicate the plant or crop is healthy. This image is inadequate as sole evidence for any agricultural health determination.\n\n**Suggested field checks**\n- Inspect the source plant in situ: check multiple leaves across the canopy for consistent lobing/margin patterns to confirm if this is normal morphology.\n- Examine leaf undersides and stems for pests, eggs, or feeding residue.\n- Compare with a known reference sample or extension guide for this species to confirm expected leaf shape.\n- Photograph the whole plant and surrounding rows for context before drawing conclusions.",
+        "total_tokens_approx": 259
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "critic",
+      "data": {
+        "verified": true,
+        "hallucination_count": 0,
+        "hallucinations": [],
+        "missed_entities": [],
+        "corrections": [
+          {
+            "original_claim": "The lobing pattern appears consistent with natural leaf morphology rather than feeding damage, but this cannot be confirmed",
+            "issue": "Appropriately hedged, but slightly softer than warranted given clean, symmetrical, repeating lobe pattern typical of mulberry/similar species leaves, which strongly favors natural morphology over damage",
+            "corrected_claim": "The lobing is bilaterally patterned and symmetrical, strongly suggesting natural leaf morphology; feeding damage remains a remote alternative given the regularity",
+            "referenced_entity_id": null
+          }
+        ],
+        "critic_confidence": 0.88,
+        "critic_notes": "All five Stage 1 entities were addressed. No spatial hallucinations found; bboxes align with visible structures. Reasoning avoids overclaiming disease or pest presence and correctly flags specimen-photo limitations. Minor point: lobe symmetry could have been used more decisively to favor natural morphology over damage, though current hedge is not unreasonable. No missed anomalies observed in image beyond what was noted."
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "synthesis",
+      "data": {
+        "review_status": "reviewed",
+        "limitations": [
+          "Visual inspection support; not a confirmed diagnosis.",
+          "Image regions are approximate. Confidence is not a measured probability.",
+          "No visible concern in one image does not establish whole-plant health."
+        ],
+        "image_suitability": "limited",
+        "visible_concern": "absent",
+        "primary_finding": "Single detached leaf photographed against a plain gray background shows symmetrical, natural lobing and intact margins; no lesions, discoloration, or pest damage observed.",
+        "severity": "NOMINAL",
+        "confidence": 0.72,
+        "affected_entities": [],
+        "evidence_chain": [
+          {
+            "step_number": 1,
+            "description": "Image shows a single isolated leaf on a neutral gray backdrop, lacking canopy, soil, or plant context.",
+            "supporting_entity_ids": [
+              "E1",
+              "E5"
+            ]
+          },
+          {
+            "step_number": 2,
+            "description": "Leaf margin shows bilaterally symmetrical, regularly repeating lobes consistent with natural morphology rather than irregular feeding damage.",
+            "supporting_entity_ids": [
+              "E2"
+            ]
+          },
+          {
+            "step_number": 3,
+            "description": "Midrib and lateral veins appear intact and evenly branching, with no visible lesions or necrotic patches.",
+            "supporting_entity_ids": [
+              "E3"
+            ]
+          },
+          {
+            "step_number": 4,
+            "description": "Petiole is visible and appears unremarkable.",
+            "supporting_entity_ids": [
+              "E4"
+            ]
+          },
+          {
+            "step_number": 5,
+            "description": "Critic verification found no hallucinations; corrected claim strengthens confidence that lobing is natural rather than damage-related.",
+            "supporting_entity_ids": [
+              "E2"
+            ]
+          }
+        ],
+        "recommended_action": "No treatment indicated from this image. For a reliable assessment, photograph the leaf in situ with surrounding canopy, undersides of leaves, and stem, and compare against multiple leaves on the same plant to confirm normal morphology.",
+        "summary": "Isolated leaf specimen photo shows symmetrical natural lobing with no visible lesions or damage; image lacks field context, so finding is provisional and inconclusive for overall plant health."
+      }
+    },
+    {
+      "type": "metrics",
+      "stage": "metrics",
+      "data": {
+        "total_latency_ms": 31505.3,
+        "stage_latencies": {
+          "mapping": 8034.0,
+          "deliberation": 8451.4,
+          "critic": 5880.0,
+          "synthesis": 9139.9
+        },
+        "tokens_per_second": 69.7,
+        "total_tokens_generated": 2676,
+        "vram_usage_mb": 0.0,
+        "vram_total_mb": 0.0,
+        "gpu_utilization_percent": 0.0,
+        "model_name": "claude-sonnet-5",
+        "quantization": "hosted",
+        "image_resolution": "256x256 -> 256x256"
+      }
+    }
+  ],
+  "no_critic": {
+    "review_status": "needs_review",
+    "limitations": [],
+    "image_suitability": "limited",
+    "visible_concern": "absent",
+    "primary_finding": "Single detached leaf photographed against a plain gray background; margin lobing appears consistent with natural leaf morphology, no clear lesions, discoloration, or pest damage visible.",
+    "severity": "NOMINAL",
+    "confidence": 0.55,
+    "affected_entities": [
+      {
+        "entity_id": "E2",
+        "role": "primary",
+        "bbox": {
+          "xmin": 0.25,
+          "ymin": 0.1,
+          "xmax": 0.77,
+          "ymax": 0.75
+        }
+      },
+      {
+        "entity_id": "E1",
+        "role": "context",
+        "bbox": {
+          "xmin": 0.24,
+          "ymin": 0.07,
+          "xmax": 0.78,
+          "ymax": 0.9
+        }
+      }
+    ],
+    "evidence_chain": [
+      {
+        "step_number": 1,
+        "description": "Image shows a single isolated leaf on a plain background, not an in-field or canopy context, limiting diagnostic value.",
+        "supporting_entity_ids": [
+          "E1",
+          "E5"
+        ]
+      },
+      {
+        "step_number": 2,
+        "description": "Leaf margin shows pointed lobes/serrations; no clear evidence distinguishes this from normal leaf shape versus damage.",
+        "supporting_entity_ids": [
+          "E2"
+        ]
+      },
+      {
+        "step_number": 3,
+        "description": "Midrib, venation, and petiole appear intact with no visible lesions, spotting, or discoloration.",
+        "supporting_entity_ids": [
+          "E3",
+          "E4"
+        ]
+      },
+      {
+        "step_number": 4,
+        "description": "No pests, eggs, holes, or chewing damage are visible at this resolution.",
+        "supporting_entity_ids": [
+          "E1",
+          "E2"
+        ]
+      }
+    ],
+    "recommended_action": "Treat as inconclusive for disease/pest diagnosis due to lack of field context and species identification. Inspect the source plant in situ, examine multiple leaves and undersides for pests or lesions, and compare leaf shape to a known reference to confirm normal morphology before any action.",
+    "summary": "Isolated leaf specimen photo shows no convincing signs of disease or pest damage; lobed margin likely natural shape. Lack of field context limits confidence; recommend direct plant inspection."
+  },
+  "no_critic_synthesis_seconds": 7.44,
+  "no_critic_output_tokens": 751
+}

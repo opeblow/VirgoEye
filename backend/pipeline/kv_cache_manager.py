@@ -20,7 +20,7 @@ from typing import Any, Dict, Iterable, Optional, Tuple
 
 # Bump this whenever a stage prompt/format changes so stale cached
 # results are automatically invalidated.
-PROMPT_VERSION = "2.0.1"
+PROMPT_VERSION = "2.3.0"
 
 
 @dataclass
@@ -36,6 +36,7 @@ class PipelineContext:
     map_json: str = ""
     critique_json: str = ""
     metrics: Dict = field(default_factory=dict)
+    extra_review: bool = True
 
     def stage_prompt_variant(self, stage: str, variant: int = 0) -> str:
         """Identifier for caching: model + image + variant inputs + stage.
@@ -52,6 +53,7 @@ class PipelineContext:
                 stage,
                 str(variant),
                 PROMPT_VERSION,
+                str(self.extra_review) if stage in {"critic", "synthesis"} else "shared",
             ]
         )
 

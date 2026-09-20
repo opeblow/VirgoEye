@@ -1,4 +1,11 @@
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=False)
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+ANTHROPIC_WORKSPACE_ID = os.getenv("ANTHROPIC_WORKSPACE_ID", "")
+ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001")
 
 
 def _env(name: str, default: str) -> str:
@@ -70,3 +77,12 @@ PORT = _env_int("VIRGO_PORT", 8000)
 VIRGO_DEMO_MODE = _env_bool("VIRGO_DEMO_MODE", False)
 
 CRITIC_PARALLEL_AGENTS = _env_int("CRITIC_PARALLEL_AGENTS", 1)
+# Public demo safeguards. Public mode must be explicitly configured before launch.
+PUBLIC_MODE = _env_bool("VIRGO_PUBLIC_MODE", False)
+ACCESS_CODE = _env("VIRGO_ACCESS_CODE", "")
+MAX_ANALYSES = _env_int("VIRGO_MAX_ANALYSES", 10)
+DEMO_BUDGET_USD = _env_float("VIRGO_DEMO_BUDGET_USD", 0.0)
+INPUT_USD_PER_M = _env_float("VIRGO_INPUT_USD_PER_M", 0.0)
+OUTPUT_USD_PER_M = _env_float("VIRGO_OUTPUT_USD_PER_M", 0.0)
+MAX_INPUT_TOKENS = _env_int("VIRGO_MAX_INPUT_TOKENS", 12000)
+USAGE_DB = _env("VIRGO_USAGE_DB", str(Path(__file__).resolve().parents[1] / ".runtime" / "usage.sqlite3"))

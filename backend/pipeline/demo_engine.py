@@ -341,10 +341,8 @@ async def run_demo_pipeline(
         "data": {
             "total_latency_ms": round((time.perf_counter() - t0) * 1000, 1),
             "stage_latencies": tracker.stage_latencies,
-            "tokens_per_second": round(
-                tracker.total_tokens_generated / max(0.5, time.perf_counter() - s1), 1
-            ),
-            "total_tokens_generated": tracker.total_tokens_generated,
+            "tokens_per_second": 0.0,
+            "total_tokens_generated": 0,
             # Real GPU snapshot if present; 0.0 otherwise. No fabricated VRAM.
             "vram_usage_mb": gpu_snap.get("vram_usage_mb", 0.0),
             "vram_total_mb": gpu_snap.get("vram_total_mb", 0.0),

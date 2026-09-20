@@ -109,7 +109,7 @@ export function ImageUploader({
                 Drag &amp; drop an image, paste, or click to browse
               </p>
               <p className="text-xs text-virgo-muted mt-1">
-                Earth Forward: satellite / agriculture / wildlife / disaster · also PCB / medical
+                Use a clear crop or field image · JPG, PNG or WebP
               </p>
             </div>
           </>

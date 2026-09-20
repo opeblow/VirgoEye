@@ -13,7 +13,7 @@ export function CriticReport({ report }: CriticReportProps) {
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-medium text-virgo-text flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-virgo-warn" />
-          Critic Verification
+          Automated evidence review
         </h3>
         <span
           className={`text-xs font-mono px-2 py-1 rounded-full ${
@@ -27,10 +27,10 @@ export function CriticReport({ report }: CriticReportProps) {
       </div>
 
       <div className="grid grid-cols-3 gap-2 mb-3 text-center">
-        <Stat label="Hallucinations" value={report.hallucination_count} color="text-virgo-danger" />
+        <Stat label="Flagged claims" value={report.hallucination_count} color="text-virgo-danger" />
         <Stat label="Missed" value={report.missed_entities.length} color="text-virgo-warn" />
         <Stat
-          label="Critic Conf."
+          label="Model estimate"
           value={`${(report.critic_confidence * 100).toFixed(0)}%`}
           color="text-virgo-accent"
         />

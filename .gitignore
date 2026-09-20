@@ -55,3 +55,16 @@ logs/
 *.pyproj
 *.sln
 *.user
+# Private demo budget ledger
+.runtime/
+
+# Private recordings, rendered media and local usage databases
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.sqlite*
+*.db
+*.db-*
+.ruff_cache/
+.mypy_cache/

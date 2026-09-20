@@ -3,10 +3,10 @@
 import type { Severity } from "./types";
 
 export const STAGE_LABELS: Record<string, string> = {
-  mapping: "Spatial Mapping",
-  deliberation: "CoVT Deliberation",
-  critic: "Critic Verification",
-  synthesis: "Final Verdict",
+  mapping: "Locate regions",
+  deliberation: "Read evidence",
+  critic: "Review findings",
+  synthesis: "Plan field check",
 };
 
 export const STAGE_ORDER = ["mapping", "deliberation", "critic", "synthesis"] as const;

@@ -6,15 +6,17 @@ import { cn } from "@/lib/utils";
 
 interface StageIndicatorProps {
   stage: PipelineStage;
+  extraReview?: boolean;
 }
 
-export function StageIndicator({ stage }: StageIndicatorProps) {
-  const currentIdx = STAGE_ORDER.indexOf(stage as (typeof STAGE_ORDER)[number]);
+export function StageIndicator({ stage, extraReview = true }: StageIndicatorProps) {
+  const stages = STAGE_ORDER.filter(s => extraReview || s !== "critic");
+  const currentIdx = stages.indexOf(stage as (typeof STAGE_ORDER)[number]);
 
   return (
     <div className="flex items-center justify-between gap-2 w-full">
-      {STAGE_ORDER.map((s, i) => {
-        const done = currentIdx > i;
+      {stages.map((s, i) => {
+        const done = stage === "done" || currentIdx > i;
         const active = currentIdx === i;
         const color = STAGE_COLORS[s];
         return (

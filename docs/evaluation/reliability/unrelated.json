@@ -1,0 +1,31 @@
+{
+  "case": {
+    "id": "unrelated",
+    "path": "backend/tests/sample_images/pcb_fault.png",
+    "source": "Repository-generated PCB illustration",
+    "expected": "uncertain",
+    "expectation_basis": "Non-crop input to agriculture inspection"
+  },
+  "prompt_version": "2.2.0",
+  "model": "claude-sonnet-5",
+  "full_seconds": 9.35,
+  "full_events": [
+    {
+      "type": "info",
+      "stage": "system",
+      "data": {
+        "image_resolution": "512x512 -> 512x512",
+        "domain": "agriculture",
+        "model": "claude-sonnet-5",
+        "quantization": "hosted",
+        "demo_mode": false,
+        "ollama_ok": false
+      }
+    },
+    {
+      "type": "error",
+      "stage": "mapping",
+      "message": "Stage 1 schema validation failed: 1 validation error for DiagnosticMap\nentities.1.bbox.ymax\n  Field required [type=missing, input_value={'xmin': 0.28, 'ymin': 0....x': 0.39, ',ymax': 0.39}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing"
+    }
+  ]
+}

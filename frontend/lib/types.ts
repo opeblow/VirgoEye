@@ -86,6 +86,10 @@ export interface EvidenceStep {
 }
 
 export interface FinalVerdict {
+  image_suitability?: "adequate" | "limited" | "unsuitable";
+  visible_concern?: "present" | "absent" | "uncertain";
+  review_status?: "reviewed" | "needs_review" | "not_reviewed";
+  limitations?: string[];
   primary_finding: string;
   severity: Severity;
   confidence: number;
@@ -96,6 +100,8 @@ export interface FinalVerdict {
 }
 
 export interface PerformanceMetrics {
+  cached_stages?: string[];
+  synthetic?: boolean;
   total_latency_ms: number;
   stage_latencies: Record<string, number>;
   tokens_per_second: number;

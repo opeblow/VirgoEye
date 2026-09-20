@@ -22,7 +22,7 @@ export function ThoughtTerminal({ text, streaming }: ThoughtTerminalProps) {
         <span className="w-3 h-3 rounded-full bg-virgo-warn/80" />
         <span className="w-3 h-3 rounded-full bg-virgo-ok/80" />
         <span className="ml-2 text-xs font-mono text-virgo-muted">
-          deliberation :: covt-thought-stream
+          Visible evidence & uncertainty
         </span>
         {streaming && <span className="ml-auto text-[10px] font-mono text-virgo-accent animate-pulse">REC</span>}
       </div>
@@ -31,7 +31,7 @@ export function ThoughtTerminal({ text, streaming }: ThoughtTerminalProps) {
         <pre className="whitespace-pre-wrap break-words font-mono text-[13px] leading-relaxed text-emerald-50/90">
           {text || (
             <span className="text-emerald-200/60 italic">
-              // Awaiting stream from CoVT deliberator…
+              Your image observations will appear here.
             </span>
           )}
           {streaming && <span className="inline-block w-2 h-4 bg-emerald-400 animate-typewriterCursor" />}

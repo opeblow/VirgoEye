@@ -20,20 +20,26 @@ export function VerdictCard({ verdict }: VerdictCardProps) {
             className="text-[10px] font-mono uppercase tracking-widest"
             style={{ color }}
           >
-            Final Verdict
+            Inspection finding
           </span>
           <span
-            className="text-2xl font-black font-mono tracking-tight"
+            className="text-lg font-black font-mono tracking-tight text-right"
             style={{ color }}
           >
-            {verdict.severity}
+            {verdict.image_suitability === "unsuitable" ? "NEW PHOTO NEEDED" : verdict.review_status === "needs_review" ? "NEEDS REVIEW" : verdict.visible_concern === "absent" ? "NO VISIBLE CONCERN" : verdict.severity}
           </span>
         </div>
         <h3 className="text-sm font-medium text-virgo-text mt-2">{verdict.primary_finding}</h3>
       </div>
       <div className="p-5 space-y-4">
+        <div className="rounded-lg bg-virgo-border/40 border border-virgo-border/50 p-3">
+          <p className="text-[10px] font-mono text-virgo-muted uppercase mb-1">Recommended Action</p>
+          <p className="text-xs text-virgo-text leading-relaxed">{verdict.recommended_action}</p>
+        </div>
+        <p className="text-xs text-virgo-muted">{verdict.review_status === "reviewed" ? "Additional automated review completed. Human confirmation is still needed." : verdict.review_status === "not_reviewed" ? "Standard inspection · additional automated review was not requested." : "Do not treat this as a verified conclusion."}</p>
+        {verdict.limitations?.map((item) => <p key={item} className="text-xs text-virgo-muted">{item}</p>)}
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-mono text-virgo-muted uppercase">Confidence</span>
+          <span className="text-[10px] font-mono text-virgo-muted uppercase">Model estimate</span>
           <div className="flex-1 h-2 rounded-full bg-virgo-border/60 overflow-hidden">
             <div
               className="h-full rounded-full transition-all duration-700"
@@ -45,10 +51,8 @@ export function VerdictCard({ verdict }: VerdictCardProps) {
           </span>
         </div>
 
-        <div>
-          <p className="text-[10px] font-mono text-virgo-muted uppercase mb-2">
-            Evidence Chain
-          </p>
+        <details>
+          <summary className="text-xs font-medium cursor-pointer mb-2">Supporting evidence</summary>
           <ol className="space-y-2">
             {verdict.evidence_chain.map((step) => (
               <li key={step.step_number} className="flex gap-2 text-xs text-virgo-text/90">
@@ -59,7 +63,7 @@ export function VerdictCard({ verdict }: VerdictCardProps) {
               </li>
             ))}
           </ol>
-        </div>
+        </details>
 
         {verdict.affected_entities.length > 0 && (
           <div>
@@ -84,10 +88,7 @@ export function VerdictCard({ verdict }: VerdictCardProps) {
           </div>
         )}
 
-        <div className="rounded-lg bg-virgo-border/40 border border-virgo-border/50 p-3">
-          <p className="text-[10px] font-mono text-virgo-muted uppercase mb-1">Recommended Action</p>
-          <p className="text-xs text-virgo-text leading-relaxed">{verdict.recommended_action}</p>
-        </div>
+
       </div>
     </GlassCard>
   );

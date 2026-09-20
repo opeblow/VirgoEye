@@ -27,7 +27,7 @@ class BaseAgent(ABC):
         model_name: str = "",
     ) -> None:
         self.ollama = ollama or OllamaClient()
-        self.vllm = vllm if config.VLLM_ENABLED else None
+        self.vllm = vllm
         self.gpu = gpu or GPUMonitor()
         self.tracker = tracker or SpeedTracker()
         self.model_name = model_name or config.VIRGO_MODEL
@@ -60,8 +60,16 @@ class BaseAgent(ABC):
         self, image_b64: str, prompt: str
     ) -> AsyncGenerator[Dict[str, Any], None]:
         assert self.vllm is not None
+        options = {}
+        if getattr(self.vllm, "supports_response_schema", False):
+            from backend.schema.diagnostic_map import DiagnosticMap
+            from backend.schema.verification import VerificationReport
+            from backend.schema.verdict import FinalVerdict
+            schema = {"mapping": DiagnosticMap, "critic": VerificationReport, "synthesis": FinalVerdict}.get(self.stage_name)
+            if schema is not None:
+                options["response_schema"] = schema.model_json_schema()
         async for chunk in self.vllm.chat_stream(
-            image_base64=image_b64, prompt=prompt, system=self._system
+            image_base64=image_b64, prompt=prompt, system=self._system, **options
         ):
             yield chunk
 

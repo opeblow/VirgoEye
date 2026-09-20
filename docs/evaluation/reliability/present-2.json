@@ -1,0 +1,359 @@
+{
+  "case": {
+    "id": "present-2",
+    "path": "/tmp/virgoeye-reliability/present-2.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___Early_blight/0034a551-9512-44e5-ba6c-827f85ecc688___RS_Erly.B%209432.JPG",
+    "expected": "present",
+    "sha256": "ec1e81f52511918a2f14ac0ef020a850b745230de9ef74485d505133af963525",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  "prompt_version": "2.2.0",
+  "model": "claude-sonnet-5",
+  "full_seconds": 32.86,
+  "full_events": [
+    {
+      "type": "info",
+      "stage": "system",
+      "data": {
+        "image_resolution": "256x256 -> 256x256",
+        "domain": "agriculture",
+        "model": "claude-sonnet-5",
+        "quantization": "hosted",
+        "demo_mode": false,
+        "ollama_ok": false
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "mapping",
+      "data": {
+        "entities": [
+          {
+            "id": "E1",
+            "label": "Whole leaf",
+            "bbox": {
+              "xmin": 0.1,
+              "ymin": 0.03,
+              "xmax": 0.9,
+              "ymax": 0.95
+            },
+            "confidence": 0.9,
+            "category": "structure",
+            "description": "Single detached leaf lying on a gray surface, roughly heart/oval shaped with visible venation."
+          },
+          {
+            "id": "E2",
+            "label": "Petiole/stem base",
+            "bbox": {
+              "xmin": 0.35,
+              "ymin": 0.0,
+              "xmax": 0.55,
+              "ymax": 0.12
+            },
+            "confidence": 0.8,
+            "category": "structure",
+            "description": "Dark curled stem or petiole attachment point at top of leaf, appears dried/withered."
+          },
+          {
+            "id": "E3",
+            "label": "Grayish-white powdery/fuzzy patch",
+            "bbox": {
+              "xmin": 0.45,
+              "ymin": 0.1,
+              "xmax": 0.85,
+              "ymax": 0.45
+            },
+            "confidence": 0.65,
+            "category": "anomaly",
+            "description": "Diffuse pale gray-white coating covering upper right portion of leaf, texture differs from surrounding green tissue."
+          },
+          {
+            "id": "E4",
+            "label": "Dark speckled lesions - upper area",
+            "bbox": {
+              "xmin": 0.15,
+              "ymin": 0.25,
+              "xmax": 0.45,
+              "ymax": 0.5
+            },
+            "confidence": 0.55,
+            "category": "anomaly",
+            "description": "Small scattered dark spots on leaf surface, irregular in distribution."
+          },
+          {
+            "id": "E5",
+            "label": "Dark speckled lesions - lower area",
+            "bbox": {
+              "xmin": 0.2,
+              "ymin": 0.55,
+              "xmax": 0.6,
+              "ymax": 0.85
+            },
+            "confidence": 0.55,
+            "category": "anomaly",
+            "description": "Additional small dark spots and discoloration lower on the leaf blade."
+          },
+          {
+            "id": "E6",
+            "label": "Background surface",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.0,
+              "xmax": 1.0,
+              "ymax": 1.0
+            },
+            "confidence": 0.85,
+            "category": "region",
+            "description": "Uniform gray textured background, likely a table or backdrop, not part of plant material."
+          }
+        ],
+        "total_entities": 6,
+        "image_context": "Close-up photograph of a single detached plant leaf placed on a plain gray surface, likely taken for close inspection of leaf surface condition rather than a field or canopy scene.",
+        "scan_coverage": 0.95
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "deliberation",
+      "data": {
+        "thought_chain": "# Leaf Inspection Summary\n\n**Visible observations:**\nA single detached leaf (E1) is photographed against a plain gray background (E6), with a dark, withered petiole/stem attachment at the top (E2). Two visually distinct anomalies are present: a diffuse grayish-white patch with a different surface texture on the upper-right portion of the leaf (E3), and scattered small dark speckled lesions distributed in both the upper-left (E4) and lower-central (E5) areas of the leaf blade.\n\n**Uncertainty and alternative explanations:**\nThis is a close-up photo of an isolated leaf, not a field or canopy image, so it cannot represent overall plant or crop health. The grayish-white patch (E3) could reflect a surface coating, powdery growth, residue, or an artifact of lighting/glare \u2014 texture alone is insufficient to determine composition. The dark speckling (E4, E5) may result from various causes including environmental damage, insect activity, aging/senescence, or surface contamination; appearance alone cannot distinguish among these possibilities. No disease, pathogen, or treatment can be inferred from this single image.\n\n**Suggested field checks:**\n- Examine multiple leaves across several plants in situ (not detached) to assess pattern consistency and distribution across the canopy.\n- Inspect the underside of affected leaves for texture, coating, or insect presence.\n- Check if the gray patch is removable (wipeable) versus embedded in leaf tissue.\n- Note environmental conditions (humidity, recent rain, irrigation contact) and any similar symptoms on neighboring plants.\n- If concerns persist, submit a fresh sample to a local plant diagnostic lab for microscopic or lab-based confirmation before considering any treatment.",
+        "total_tokens_approx": 252
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "critic",
+      "data": {
+        "verified": true,
+        "hallucination_count": 0,
+        "hallucinations": [],
+        "missed_entities": [],
+        "corrections": [
+          {
+            "original_claim": "Two visually distinct anomalies are present: grayish-white patch (E3) and scattered dark speckled lesions (E4, E5)",
+            "issue": "States anomalies as confirmed facts before qualifying uncertainty; could overstate abnormality presence",
+            "corrected_claim": "Two visually distinct surface features differing from surrounding tissue are present; their status as true anomalies (vs. lighting, residue, or normal senescence) is unconfirmed",
+            "referenced_entity_id": null
+          },
+          {
+            "original_claim": "E2 described as dried/withered petiole appears embedded in reasoning as fact",
+            "issue": "Stage 1 confidence is 0.8 but withered/dried state is an interpretive descriptor not fully visually verifiable",
+            "corrected_claim": "E2 is a dark curled structure at leaf apex consistent with a petiole; desiccation state is inferred, not certain",
+            "referenced_entity_id": null
+          }
+        ],
+        "critic_confidence": 0.8,
+        "critic_notes": "Reasoning appropriately hedges causal claims and avoids diagnosis. All Stage 1 entities addressed except background (correctly excluded as non-plant). No spatial hallucinations found. Minor overstatement in labeling features as 'anomalies' before caveats; could be softened. Suggested checks are reasonable and non-diagnostic. No missed visual concerns beyond what's noted."
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "synthesis",
+      "data": {
+        "review_status": "reviewed",
+        "limitations": [
+          "Visual inspection support; not a confirmed diagnosis.",
+          "Image regions are approximate. Confidence is not a measured probability."
+        ],
+        "image_suitability": "limited",
+        "visible_concern": "present",
+        "primary_finding": "Detached leaf shows a diffuse grayish-white surface patch and scattered dark speckling; features differ from surrounding tissue but composition/cause cannot be determined from this single image.",
+        "severity": "WARNING",
+        "confidence": 0.6,
+        "affected_entities": [
+          {
+            "entity_id": "E3",
+            "role": "primary",
+            "bbox": {
+              "xmin": 0.45,
+              "ymin": 0.1,
+              "xmax": 0.85,
+              "ymax": 0.45
+            }
+          },
+          {
+            "entity_id": "E4",
+            "role": "secondary",
+            "bbox": {
+              "xmin": 0.15,
+              "ymin": 0.25,
+              "xmax": 0.45,
+              "ymax": 0.5
+            }
+          },
+          {
+            "entity_id": "E5",
+            "role": "secondary",
+            "bbox": {
+              "xmin": 0.2,
+              "ymin": 0.55,
+              "xmax": 0.6,
+              "ymax": 0.85
+            }
+          },
+          {
+            "entity_id": "E2",
+            "role": "context",
+            "bbox": {
+              "xmin": 0.35,
+              "ymin": 0.0,
+              "xmax": 0.55,
+              "ymax": 0.12
+            }
+          }
+        ],
+        "evidence_chain": [
+          {
+            "step_number": 1,
+            "description": "Single detached leaf on gray backdrop identified; not a canopy/field context, limiting generalization.",
+            "supporting_entity_ids": [
+              "E1",
+              "E6"
+            ]
+          },
+          {
+            "step_number": 2,
+            "description": "A grayish-white diffuse patch with different surface texture noted on upper-right leaf area; could be coating, growth, residue, or glare.",
+            "supporting_entity_ids": [
+              "E3"
+            ]
+          },
+          {
+            "step_number": 3,
+            "description": "Scattered dark speckled lesions observed in two separate zones of the leaf blade; cause (damage, pest, senescence, contamination) not distinguishable visually.",
+            "supporting_entity_ids": [
+              "E4",
+              "E5"
+            ]
+          },
+          {
+            "step_number": 4,
+            "description": "Curled dark structure at leaf apex consistent with a petiole; desiccation state inferred, not certain.",
+            "supporting_entity_ids": [
+              "E2"
+            ]
+          },
+          {
+            "step_number": 5,
+            "description": "Critic confirmed no hallucinations but flagged overstated certainty on 'anomaly' language and petiole desiccation; claims softened accordingly.",
+            "supporting_entity_ids": [
+              "E2",
+              "E3",
+              "E4",
+              "E5"
+            ]
+          }
+        ],
+        "recommended_action": "Do not diagnose or treat from this photo. Inspect multiple leaves in situ across several plants, check leaf undersides, test if the gray patch wipes off, note humidity/recent moisture, and consult a plant diagnostic lab if concern persists.",
+        "summary": "Isolated leaf photo shows a gray surface patch and dark speckling of uncertain origin; evidence is limited and inconclusive for diagnosis\u2014field-level re-inspection recommended."
+      }
+    },
+    {
+      "type": "metrics",
+      "stage": "metrics",
+      "data": {
+        "total_latency_ms": 32852.7,
+        "stage_latencies": {
+          "mapping": 7815.4,
+          "deliberation": 8290.1,
+          "critic": 6724.0,
+          "synthesis": 10023.2
+        },
+        "tokens_per_second": 70.2,
+        "total_tokens_generated": 2832,
+        "vram_usage_mb": 0.0,
+        "vram_total_mb": 0.0,
+        "gpu_utilization_percent": 0.0,
+        "model_name": "claude-sonnet-5",
+        "quantization": "hosted",
+        "image_resolution": "256x256 -> 256x256"
+      }
+    }
+  ],
+  "no_critic": {
+    "review_status": "needs_review",
+    "limitations": [],
+    "image_suitability": "adequate",
+    "visible_concern": "present",
+    "primary_finding": "Detached leaf shows a diffuse grayish-white surface patch and scattered dark speckled lesions; composition and cause cannot be determined from a single image.",
+    "severity": "WARNING",
+    "confidence": 0.55,
+    "affected_entities": [
+      {
+        "entity_id": "E3",
+        "role": "primary",
+        "bbox": {
+          "xmin": 0.45,
+          "ymin": 0.1,
+          "xmax": 0.85,
+          "ymax": 0.45
+        }
+      },
+      {
+        "entity_id": "E4",
+        "role": "secondary",
+        "bbox": {
+          "xmin": 0.15,
+          "ymin": 0.25,
+          "xmax": 0.45,
+          "ymax": 0.5
+        }
+      },
+      {
+        "entity_id": "E5",
+        "role": "secondary",
+        "bbox": {
+          "xmin": 0.2,
+          "ymin": 0.55,
+          "xmax": 0.6,
+          "ymax": 0.85
+        }
+      }
+    ],
+    "evidence_chain": [
+      {
+        "step_number": 1,
+        "description": "Single detached leaf isolated on plain gray background, suitable for close surface inspection but not for canopy/plant-level assessment.",
+        "supporting_entity_ids": [
+          "E1",
+          "E6"
+        ]
+      },
+      {
+        "step_number": 2,
+        "description": "A diffuse gray-white patch with differing texture is visible on the upper-right leaf blade, distinct from surrounding green tissue.",
+        "supporting_entity_ids": [
+          "E3"
+        ]
+      },
+      {
+        "step_number": 3,
+        "description": "Scattered small dark spots appear in two separate regions (upper-left and lower-central), suggesting non-uniform distribution.",
+        "supporting_entity_ids": [
+          "E4",
+          "E5"
+        ]
+      },
+      {
+        "step_number": 4,
+        "description": "Withered petiole indicates leaf was detached prior to photographing, limiting context about disease progression or plant-wide pattern.",
+        "supporting_entity_ids": [
+          "E2"
+        ]
+      },
+      {
+        "step_number": 5,
+        "description": "No microscopic, tactile, or multi-leaf data available to confirm whether patch is coating, growth, or artifact, or whether spots are biotic or abiotic.",
+        "supporting_entity_ids": [
+          "E3",
+          "E4",
+          "E5"
+        ]
+      }
+    ],
+    "recommended_action": "Inspect multiple leaves in situ across the plant/canopy; check leaf undersides and whether the gray patch wipes off; note humidity/environmental conditions; if concern persists, send a fresh sample to a plant diagnostic lab before considering treatment.",
+    "summary": "Isolated leaf photo shows a grayish surface patch and dark speckling; evidence is suggestive but inconclusive for diagnosis\u2014field verification and lab confirmation recommended."
+  },
+  "no_critic_synthesis_seconds": 8.31,
+  "no_critic_output_tokens": 921
+}

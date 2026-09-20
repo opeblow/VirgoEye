@@ -1,0 +1,357 @@
+{
+  "case": {
+    "id": "present-1",
+    "path": "/tmp/virgoeye-reliability/present-1.jpg",
+    "source": "https://raw.githubusercontent.com/spMohanty/PlantVillage-Dataset/master/raw/color/Tomato___Early_blight/0012b9d2-2130-4a06-a834-b1f3af34f57e___RS_Erly.B%208389.JPG",
+    "expected": "present",
+    "sha256": "29b79036b67724f6a76895d17ef1b863ad7a7134e03141b1feb601a591336123",
+    "expectation_basis": "PlantVillage directory label; visible-concern proxy, not a specialist annotation"
+  },
+  "prompt_version": "2.2.0",
+  "model": "claude-sonnet-5",
+  "full_seconds": 33.85,
+  "full_events": [
+    {
+      "type": "info",
+      "stage": "system",
+      "data": {
+        "image_resolution": "256x256 -> 256x256",
+        "domain": "agriculture",
+        "model": "claude-sonnet-5",
+        "quantization": "hosted",
+        "demo_mode": false,
+        "ollama_ok": false
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "mapping",
+      "data": {
+        "entities": [
+          {
+            "id": "E1",
+            "label": "Leaf surface (main subject)",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.05,
+              "xmax": 1.0,
+              "ymax": 1.0
+            },
+            "confidence": 0.9,
+            "category": "structure",
+            "description": "Single leaf occupying most of frame, viewed from upper surface, showing green tissue with variable coloration."
+          },
+          {
+            "id": "E2",
+            "label": "Dark necrotic-like spots (upper leaf area)",
+            "bbox": {
+              "xmin": 0.55,
+              "ymin": 0.08,
+              "xmax": 0.95,
+              "ymax": 0.35
+            },
+            "confidence": 0.75,
+            "category": "anomaly",
+            "description": "Cluster of dark brown/black irregular spots near leaf tip and upper right margin."
+          },
+          {
+            "id": "E3",
+            "label": "Yellow-green chlorotic patch (left side)",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.3,
+              "xmax": 0.35,
+              "ymax": 0.75
+            },
+            "confidence": 0.7,
+            "category": "anomaly",
+            "description": "Lighter yellow-green discoloration contrasting with darker green surrounding tissue, left-center of leaf."
+          },
+          {
+            "id": "E4",
+            "label": "Small dark spots (mid-lower leaf)",
+            "bbox": {
+              "xmin": 0.4,
+              "ymin": 0.45,
+              "xmax": 0.85,
+              "ymax": 0.7
+            },
+            "confidence": 0.65,
+            "category": "anomaly",
+            "description": "Scattered smaller dark spots along central and lower right portion of leaf, near veins."
+          },
+          {
+            "id": "E5",
+            "label": "Leaf vein structure",
+            "bbox": {
+              "xmin": 0.1,
+              "ymin": 0.4,
+              "xmax": 0.95,
+              "ymax": 0.95
+            },
+            "confidence": 0.6,
+            "category": "structure",
+            "description": "Visible network of primary and secondary veins across lower two-thirds of leaf."
+          },
+          {
+            "id": "E6",
+            "label": "Background surface",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.0,
+              "xmax": 1.0,
+              "ymax": 0.1
+            },
+            "confidence": 0.5,
+            "category": "region",
+            "description": "Grey speckled surface behind/around leaf edge, likely a table or backdrop, not part of plant tissue."
+          }
+        ],
+        "total_entities": 6,
+        "image_context": "Close-up macro photograph of a single plant leaf placed on a plain grey speckled surface, likely taken for crop health inspection purposes.",
+        "scan_coverage": 0.95
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "deliberation",
+      "data": {
+        "thought_chain": "# Evidence Summary\n\n**Visible observations:**\nA single leaf (E1) fills most of the frame, photographed on a plain grey speckled surface (E6). Notable features include:\n- Dark brown/black irregular spots clustered near the leaf tip and upper-right margin (E2)\n- A yellow-green chlorotic patch on the left-center of the leaf, contrasting with darker green surrounding tissue (E3)\n- Scattered smaller dark spots along the central and lower-right leaf area, near veins (E4)\n- Visible vein network across the lower two-thirds of the leaf (E5)\n\n**Uncertainty and alternative explanations:**\nThis is a single close-up macro image of one leaf, which is insufficient for a definitive field-level assessment. The dark spotting (E2, E4) could result from various causes\u2014fungal or bacterial leaf spot, insect feeding damage, physical abrasion, senescence, or even water/soil splash residue\u2014and cannot be distinguished from this image alone. The chlorotic patch (E3) may reflect nutrient deficiency, early disease response, natural leaf aging, or lighting/shadow variation in the photo. No causal agent, pathogen, or pest can be confirmed from visual appearance alone. The image also does not show plant context (whole plant, other leaves, growth stage, or field conditions), limiting extrapolation to crop health or yield.\n\n**Suggested field checks:**\n1. Inspect multiple leaves across several plants in the field to determine if the spotting/chlorosis pattern is widespread or isolated.\n2. Check the underside of affected leaves for fungal structures, insect eggs, or larvae.\n3. Note spatial distribution in the field (edges vs. center, low-lying vs. upper canopy) to help distinguish environmental stress from a spreading biotic issue.\n4. If concern persists, collect a sample for laboratory diagnostic testing rather than relying on visual assessment alone.",
+        "total_tokens_approx": 274
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "critic",
+      "data": {
+        "verified": true,
+        "hallucination_count": 0,
+        "hallucinations": [],
+        "missed_entities": [
+          "E6"
+        ],
+        "corrections": [
+          {
+            "original_claim": "A yellow-green chlorotic patch on the left-center of the leaf, contrasting with darker green surrounding tissue (E3)",
+            "issue": "Term 'chlorotic' implies a pathological interpretation; Stage 1 only describes lighter coloration, which could also be normal leaf variegation, lighting/glare, or angle-dependent reflectance.",
+            "corrected_claim": "A lighter yellow-green area on the left-center of the leaf, which may reflect natural pigmentation variation, lighting artifact, or early stress response; not confirmed as chlorosis.",
+            "referenced_entity_id": null
+          },
+          {
+            "original_claim": "Scattered smaller dark spots along the central and lower-right leaf area, near veins (E4)",
+            "issue": "Reasonable but presented with slightly more certainty than justified; small dark marks could also be debris, water spots, or shadow artifacts rather than biological spotting.",
+            "corrected_claim": "Small dark marks are visible near veins in the central/lower-right area; these may be biological spotting, debris, or shadow, not definitively anomalous tissue damage.",
+            "referenced_entity_id": null
+          }
+        ],
+        "critic_confidence": 0.8,
+        "critic_notes": "E6 (background surface) was in Stage 1 but correctly omitted from crop-relevant analysis, which is appropriate since it's not plant tissue. Core reasoning is well-hedged, avoids diagnosis, and lists plausible alternatives. Minor overreach in labeling E3 as 'chlorotic' rather than 'lighter-colored area' slightly overstates abnormality certainty. Field-check suggestions are practical and appropriately cautious."
+      }
+    },
+    {
+      "type": "stage_result",
+      "stage": "synthesis",
+      "data": {
+        "review_status": "reviewed",
+        "limitations": [
+          "Visual inspection support; not a confirmed diagnosis.",
+          "Image regions are approximate. Confidence is not a measured probability.",
+          "The reviewer reported regions not fully assessed."
+        ],
+        "image_suitability": "adequate",
+        "visible_concern": "present",
+        "primary_finding": "Single leaf image shows dark irregular spots near tip/margin and central-lower area, plus a lighter yellow-green patch; cause cannot be determined from appearance alone.",
+        "severity": "WARNING",
+        "confidence": 0.62,
+        "affected_entities": [
+          {
+            "entity_id": "E2",
+            "role": "primary",
+            "bbox": {
+              "xmin": 0.55,
+              "ymin": 0.08,
+              "xmax": 0.95,
+              "ymax": 0.35
+            }
+          },
+          {
+            "entity_id": "E3",
+            "role": "secondary",
+            "bbox": {
+              "xmin": 0.0,
+              "ymin": 0.3,
+              "xmax": 0.35,
+              "ymax": 0.75
+            }
+          },
+          {
+            "entity_id": "E4",
+            "role": "secondary",
+            "bbox": {
+              "xmin": 0.4,
+              "ymin": 0.45,
+              "xmax": 0.85,
+              "ymax": 0.7
+            }
+          }
+        ],
+        "evidence_chain": [
+          {
+            "step_number": 1,
+            "description": "Single leaf fills frame on plain background, image is clear and in focus, adequate for close-up visual review.",
+            "supporting_entity_ids": [
+              "E1",
+              "E6"
+            ]
+          },
+          {
+            "step_number": 2,
+            "description": "Cluster of dark brown/black irregular spots observed near leaf tip and upper-right margin.",
+            "supporting_entity_ids": [
+              "E2"
+            ]
+          },
+          {
+            "step_number": 3,
+            "description": "A lighter yellow-green area is visible on left-center of leaf; could reflect natural variegation, lighting, or early stress, not confirmed as pathological chlorosis.",
+            "supporting_entity_ids": [
+              "E3"
+            ]
+          },
+          {
+            "step_number": 4,
+            "description": "Smaller dark marks scattered near veins in central/lower-right area; could be biological spotting, debris, or shadow artifacts.",
+            "supporting_entity_ids": [
+              "E4",
+              "E5"
+            ]
+          },
+          {
+            "step_number": 5,
+            "description": "No pathogen, pest, or causal agent can be confirmed visually; single-leaf close-up lacks whole-plant or field context.",
+            "supporting_entity_ids": [
+              "E1"
+            ]
+          }
+        ],
+        "recommended_action": "Inspect multiple leaves and plants in the field for similar spotting/discoloration patterns, check leaf undersides for fungal growth or insect activity, and if concern persists, submit a sample for laboratory diagnostic testing before considering treatment.",
+        "summary": "Leaf photo shows dark spots and a lighter patch of uncertain origin; visual evidence alone insufficient to diagnose cause, warranting field follow-up."
+      }
+    },
+    {
+      "type": "metrics",
+      "stage": "metrics",
+      "data": {
+        "total_latency_ms": 33843.4,
+        "stage_latencies": {
+          "mapping": 8917.9,
+          "deliberation": 8429.8,
+          "critic": 7839.8,
+          "synthesis": 8655.9
+        },
+        "tokens_per_second": 76.6,
+        "total_tokens_generated": 3111,
+        "vram_usage_mb": 0.0,
+        "vram_total_mb": 0.0,
+        "gpu_utilization_percent": 0.0,
+        "model_name": "claude-sonnet-5",
+        "quantization": "hosted",
+        "image_resolution": "256x256 -> 256x256"
+      }
+    }
+  ],
+  "no_critic": {
+    "review_status": "needs_review",
+    "limitations": [],
+    "image_suitability": "adequate",
+    "visible_concern": "present",
+    "primary_finding": "Single leaf image shows dark irregular spots near tip/margin, scattered smaller dark spots near veins, and a yellow-green chlorotic patch on left side; cause cannot be determined from image alone.",
+    "severity": "WARNING",
+    "confidence": 0.55,
+    "affected_entities": [
+      {
+        "entity_id": "E2",
+        "role": "primary",
+        "bbox": {
+          "xmin": 0.55,
+          "ymin": 0.08,
+          "xmax": 0.95,
+          "ymax": 0.35
+        }
+      },
+      {
+        "entity_id": "E3",
+        "role": "primary",
+        "bbox": {
+          "xmin": 0.0,
+          "ymin": 0.3,
+          "xmax": 0.35,
+          "ymax": 0.75
+        }
+      },
+      {
+        "entity_id": "E4",
+        "role": "secondary",
+        "bbox": {
+          "xmin": 0.4,
+          "ymin": 0.45,
+          "xmax": 0.85,
+          "ymax": 0.7
+        }
+      },
+      {
+        "entity_id": "E5",
+        "role": "context",
+        "bbox": {
+          "xmin": 0.1,
+          "ymin": 0.4,
+          "xmax": 0.95,
+          "ymax": 0.95
+        }
+      }
+    ],
+    "evidence_chain": [
+      {
+        "step_number": 1,
+        "description": "Leaf fills frame with adequate clarity for surface-level visual review.",
+        "supporting_entity_ids": [
+          "E1"
+        ]
+      },
+      {
+        "step_number": 2,
+        "description": "Dark brown/black irregular spots observed near tip and upper-right margin.",
+        "supporting_entity_ids": [
+          "E2"
+        ]
+      },
+      {
+        "step_number": 3,
+        "description": "Yellow-green chlorotic patch contrasts with surrounding darker green tissue on left side.",
+        "supporting_entity_ids": [
+          "E3"
+        ]
+      },
+      {
+        "step_number": 4,
+        "description": "Additional smaller dark spots scattered near veins in mid-to-lower leaf.",
+        "supporting_entity_ids": [
+          "E4",
+          "E5"
+        ]
+      },
+      {
+        "step_number": 5,
+        "description": "No pathogen, pest, or nutrient cause can be confirmed visually; single-leaf image lacks field/plant context.",
+        "supporting_entity_ids": [
+          "E1",
+          "E6"
+        ]
+      }
+    ],
+    "recommended_action": "Do not apply treatment based on this photo alone. Inspect multiple leaves across several plants, check leaf undersides for fungal structures or insects, note spatial distribution in field, and consider lab diagnostic sampling if pattern is widespread.",
+    "summary": "Leaf photo shows dark spotting and a chlorotic patch of uncertain cause; findings are provisional and warrant broader field inspection, not a diagnosis or treatment decision."
+  },
+  "no_critic_synthesis_seconds": 8.39,
+  "no_critic_output_tokens": 880
+}

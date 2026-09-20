@@ -31,7 +31,7 @@ export function useSSEStream({ onEvent, onError }: UseSSEStreamOpts = {}) {
   }, []);
 
   const start = useCallback(
-    async (imageBase64: string, domain = "auto", detailLevel = "high") => {
+    async (imageBase64: string, domain = "auto", detailLevel = "high", extraReview = false, accessCode = "") => {
       abort();
       bufferRef.current = "";
       setEvents([]);
@@ -43,15 +43,19 @@ export function useSSEStream({ onEvent, onError }: UseSSEStreamOpts = {}) {
       try {
         const res = await fetch(`${API_BASE}/v1/analyze`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...(accessCode ? {"X-Virgo-Access-Code": accessCode} : {}) },
           body: JSON.stringify({
             image_base64: imageBase64,
             domain,
             detail_level: detailLevel,
+            extra_review: extraReview,
           }),
           signal: controller.signal,
         });
-        if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok || !res.body) {
+          const failure = await res.json().catch(() => ({}));
+          throw new Error(typeof failure.detail === "string" ? failure.detail : `Service unavailable (${res.status})`);
+        }
 
         const reader = res.body.getReader();
         readerRef.current = reader;

@@ -5,7 +5,7 @@ You are the CRITIC. Your job is to find flaws in the Stage 2 reasoning.
 
 You have been given:
 - The original image
-- The Stage 1 spatial map (ground truth coordinates) — {map_json}
+- The Stage 1 preliminary spatial map (fallible model estimates) — {map_json}
 - The Stage 2 thought chain (reasoning to verify) — {thought_chain}
 
 YOUR TASK: Systematically verify every claim in the thought chain.
@@ -46,7 +46,7 @@ OUTPUT FORMAT: Respond with ONLY valid JSON:
   "critic_notes": "..."
 }}
 
-Be ruthless. Your job is to catch errors. The final verdict depends on you.
+Challenge unsupported abnormality claims as carefully as missed concerns. Natural leaf shape, faint specks and missing field context alone are not proof of a crop problem. Do not count background details as missed crop concerns. Keep critic_notes under 100 words and corrections under 4 items.
 """
 
 

@@ -6,12 +6,14 @@ import time
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Dict, Any
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from pydantic import ValidationError
 
 from backend import config
+from backend.public_guard import get_public_guard, GuardError
+from backend.ml_utils.anthropic_client import AnthropicVisionClient
 from backend.pipeline.orchestrator import PipelineOrchestrator
 from backend.schema.api import AnalyzeRequest, ErrorResponse
 
@@ -43,6 +45,7 @@ async def _event_stream(req: AnalyzeRequest) -> AsyncGenerator[str, None]:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global orchestrator
+    get_public_guard()  # Fail startup if public safeguards are incomplete.
     orchestrator = PipelineOrchestrator()
     await orchestrator.initialize()
     app.state.orchestrator = orchestrator
@@ -71,16 +74,25 @@ async def health() -> Dict[str, Any]:
     snap = orchestrator.gpu.snapshot()
     return {
         "status": "ok",
+        "access_code_required": config.PUBLIC_MODE,
         "model": orchestrator.model_name,
         "ollama": orchestrator.ollama_ok,
         "quantization": orchestrator._quantization,
         "demo_mode": orchestrator.demo_mode,
+        "provider": "simulation" if orchestrator.demo_mode else ("anthropic" if isinstance(orchestrator.vllm, AnthropicVisionClient) else "local"),
         "gpu": {k: v for k, v in snap.items() if k != "available"},
         "server": {"version": "2.0.0", "time": time.time()},
     }
 
 
-@app.post("/v1/analyze")
+async def admit_inspection(request: Request):
+    guard = get_public_guard()
+    if guard:
+        try: guard.admit(request.headers.get("x-virgo-access-code", ""))
+        except GuardError as exc: raise HTTPException(exc.status, str(exc)) from None
+
+
+@app.post("/v1/analyze", dependencies=[Depends(admit_inspection)])
 async def analyze(req: AnalyzeRequest) -> StreamingResponse:
     return StreamingResponse(
         _event_stream(req),
@@ -93,7 +105,7 @@ async def analyze(req: AnalyzeRequest) -> StreamingResponse:
     )
 
 
-@app.post("/v1/analyze-json")
+@app.post("/v1/analyze-json", dependencies=[Depends(admit_inspection)])
 async def analyze_json(req: AnalyzeRequest) -> JSONResponse:
     """Non-streaming variant that buffers all stage results and returns JSON."""
     final = {

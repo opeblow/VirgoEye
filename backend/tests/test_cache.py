@@ -121,3 +121,26 @@ def test_cache_disabled_returns_none():
     cache = KVCacheManager(enabled=False)
     cache.store("k", {"type": "stage_result", "stage": "mapping", "data": {}})
     assert cache.get("k") is None
+
+def test_optional_review_keeps_synthesis_cache_separate():
+    standard = make_ctx(extra_review=False)
+    reviewed = make_ctx(extra_review=True)
+    assert standard.stage_prompt_variant("mapping") == reviewed.stage_prompt_variant("mapping")
+    assert standard.stage_prompt_variant("synthesis") != reviewed.stage_prompt_variant("synthesis")
+
+
+def test_standard_pipeline_skips_critic():
+    import json
+    orch = PipelineOrchestrator()
+    ctx = make_ctx(extra_review=False)
+    class SuccessAgent:
+        def __init__(self, name): self.stage_name = name
+        async def run(self, context, image):
+            assert self.stage_name != "critic"
+            if self.stage_name == "synthesis":
+                assert json.loads(context.critique_json)["review_performed"] is False
+            yield {"type":"stage_result", "stage":self.stage_name, "data":{}}
+    orch.agent = lambda cls, **kw: SuccessAgent(cls.stage_name)
+    events = _pipeline_events(orch, ctx, "b64")
+    assert any(e["type"] == "review_skipped" for e in events)
+    assert not any(e.get("type") == "stage_result" and e.get("stage") == "critic" for e in events)
